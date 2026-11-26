@@ -6,19 +6,20 @@ import {Button} from '@astryxdesign/core/Button';
 import {Link} from '@astryxdesign/core/Link';
 import {Token} from '@astryxdesign/core/Token';
 import {Badge} from '@astryxdesign/core/Badge';
-import {Link as RouterLink} from 'react-router-dom';
+import {Link as RouterLink, useNavigate} from 'react-router-dom';
 import {profile, about, experience, education, projects, skills, achievements} from '../content';
 import {Logo, Section, BulletList, SkillPill} from '../ui';
 import {Icon} from '@astryxdesign/core/Icon';
 import {brandIcons, skillIcons} from '../icons';
-import {UserCircleIcon, BriefcaseIcon, AcademicCapIcon, RectangleStackIcon, WrenchScrewdriverIcon, TrophyIcon} from '@heroicons/react/24/outline';
+import {ComputerDesktopIcon, UserCircleIcon, BriefcaseIcon, AcademicCapIcon, RectangleStackIcon, WrenchScrewdriverIcon, TrophyIcon} from '@heroicons/react/24/outline';
 import ProjectSlider from '../ProjectSlider';
 
 export default function Home() {
+  const navigate = useNavigate();
   return (
     <>
-      <VStack gap={4} paddingBlock={8}>
-        <div data-hero><Heading level={1} type="display-1" textWrap="balance">{profile.name}</Heading></div>
+      <VStack gap={4} style={{paddingBlock: 'var(--hero-pad)'}}>
+        <div data-hero><Heading level={1} type="display-1" textWrap="balance" className="hero-name">{profile.name}</Heading></div>
         <div data-hero>
           <HStack gap={3} wrap="wrap">
             {profile.links.map((l) => (
@@ -33,6 +34,14 @@ export default function Home() {
               />
               </span>
             ))}
+            <span className="brand brand-setup">
+              <Button
+                label="My Setup"
+                variant="secondary"
+                onClick={() => navigate('/setup')}
+                icon={<Icon icon={ComputerDesktopIcon} size="sm" color="inherit" />}
+              />
+            </span>
           </HStack>
         </div>
         <div data-hero><Text type="large" color="secondary" textWrap="balance">{profile.role}</Text></div>
@@ -43,17 +52,10 @@ export default function Home() {
         <div data-reveal>
           {/* photo and text sit together, vertically centred; they stack on narrow screens */}
           <div style={{display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 56}}>
-            <div style={{flex: '0 0 auto', width: 'min(100%, 320px)'}}>
-              <img
-                src={about.photo}
-                alt={`Portrait of ${profile.name}`}
-                style={{
-                  width: '100%', aspectRatio: '4 / 5', objectFit: 'cover', objectPosition: '55% 50%',
-                  borderRadius: 12, border: '1px solid rgba(128,128,128,0.35)', display: 'block',
-                }}
-              />
+            <div style={{flex: '0 0 auto', maxWidth: '100%'}}>
+              <img className="about-photo" src={about.photo} alt={`Portrait of ${profile.name}`} />
             </div>
-            <VStack gap={5} style={{flex: '1 1 340px', minWidth: 0}}>
+            <VStack gap={5} style={{flex: '1 1 340px', minWidth: 0, gap: 'var(--text-gap)'}}>
               {about.paragraphs.map((t) => <Text key={t} textWrap="pretty">{t}</Text>)}
               <VStack gap={1.5}>
                 <Text color="secondary" size="sm">Professional Interests</Text>

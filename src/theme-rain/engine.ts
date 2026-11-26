@@ -71,7 +71,6 @@ const THEMES: Record<ThemeName, { bg: string; ring: string }> = {
 };
 
 const EASE_OUT = "cubic-bezier(0.23, 1, 0.32, 1)";
-const EASE_DRAWER = "cubic-bezier(0.32, 0.72, 0, 1)";
 /* the flood grows steadily and lands at full speed, with no slow tail while it crawls into the corners */
 const FLOOD_EASE = "cubic-bezier(0.4, 0.15, 0.55, 0.95)";
 /* the longest real run is ~2.4s (Diwali in a large scene) */
@@ -80,7 +79,6 @@ const WATCHDOG_MS = 5000;
 /* ── utils ─────────────────────────────────────────────────────────────── */
 
 const noop = () => {};
-const wait = (ms: number) => new Promise<void>((r) => setTimeout(r, ms));
 const finished = (anim: Animation) => anim.finished.then(noop, noop);
 const clamp = (v: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, v));
 const rand = (a: number, b: number) => a + Math.random() * (b - a);

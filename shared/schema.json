@@ -718,6 +718,41 @@
      "type": "strings"
     }
    ]
+  },
+  "setup": {
+   "label": "My setup (PC parts)",
+   "kind": "list",
+   "titleKey": "name",
+   "subtitleKey": "part",
+   "fields": [
+    {
+     "key": "part",
+     "label": "Part (CPU, GPU, RAM…)",
+     "type": "text",
+     "required": true
+    },
+    {
+     "key": "name",
+     "label": "Name",
+     "type": "text",
+     "required": true
+    },
+    {
+     "key": "detail",
+     "label": "Detail",
+     "type": "text"
+    },
+    {
+     "key": "image",
+     "label": "Photo of the part (path or URL)",
+     "type": "text"
+    },
+    {
+     "key": "imageAlt",
+     "label": "Photo description",
+     "type": "text"
+    }
+   ]
   }
  }
 }

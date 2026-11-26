@@ -3,6 +3,30 @@
 
 /* Page colours. Light mode is white. The real values live in src/palette.ts. */
 :root { --bg: light-dark(#ffffff, #121212); --fg: light-dark(#000000, #ffffff); } /* fallback until App.tsx sets them from src/palette.ts */
+
+/* The first screen (name, bio and About Me) is sized from the window height, so it fits in one view on any laptop or desktop,
+   with the leftover room as empty space. Phones scroll normally (see the max-width rules below). */
+:root {
+  --page-pad: clamp(12px, 3vh, 48px);     /* top and bottom padding of the page */
+  --block-gap: clamp(16px, 5vh, 80px);    /* gap between the top bar, the hero and the sections */
+  --hero-pad: clamp(0px, 1.5vh, 64px);    /* breathing room above and below the hero */
+  --section-gap: 72px;                    /* space above each section */
+  --slider-edge: 40px;                    /* faded strip at each end of the project slider */
+  --sec-gap: clamp(12px, 3vh, 48px);      /* gap between a section's header and its content */
+  --text-gap: clamp(10px, 2.2vh, 20px);   /* gaps inside the About Me text */
+  --photo-h: clamp(190px, calc(100svh - 520px), 400px); /* About Me photo */
+}
+/* the name shrinks a little on short windows so the first screen still fits */
+.hero-name { font-size: clamp(30px, 6vh, 48px) !important; line-height: 1.1 !important; }
+/* On short desktop windows (a laptop with browser toolbars) everything scales down a little, like a browser zoom of 80-100%,
+   so the first screen still fits. Sizes in the site are rem-based, so this one rule scales them all. */
+@media (min-width: 721px) and (max-height: 800px) { html { font-size: clamp(13px, 2vh, 16px); } }
+.about-photo { height: var(--photo-h); width: auto; max-width: 100%; aspect-ratio: 4 / 5; object-fit: cover; object-position: 55% 50%; border-radius: 12px; border: 1px solid rgba(128,128,128,0.35); display: block; }
+@media (max-width: 720px) {
+  .about-photo { height: auto; width: min(100%, 320px); }
+  :root { --section-gap: 48px; --slider-edge: 12px; }
+  .slider-arrow { display: none; } /* phones swipe the project cards; the numbers below still jump to a project */
+}
 html { scroll-behavior: smooth; background: var(--bg); }
 a { text-underline-offset: 3px; }
 

@@ -10,7 +10,7 @@ import {COLLECTIONS} from './schema';
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const targets: Record<string, any> = {
   profile: C.profile, about: C.about, experience: C.experience, education: C.education, projects: C.projects,
-  skills: C.skills, achievements: C.achievements, travel: C.travel, watched: C.watched, playlists: C.playlists, games: C.games, learning: C.learning,
+  skills: C.skills, achievements: C.achievements, travel: C.travel, watched: C.watched, playlists: C.playlists, games: C.games, learning: C.learning, setup: C.setup,
 };
 
 const clone = <T,>(v: T): T => JSON.parse(JSON.stringify(v));

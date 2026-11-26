@@ -13,7 +13,7 @@ import {ProjectHero} from './ui';
 
 const CARD_W = 360;
 const GAP = 16; // Carousel gap={4}
-const EDGE = 40; // the faded strip at each end; cards rest just inside it
+const EDGE = 'var(--slider-edge)'; // the faded strip at each end (40px, 12px on phones); cards rest just inside it
 const SPEED = 36; // px per second, right to left
 
 function ProjectCard({p}: {p: Project}) {
@@ -68,7 +68,7 @@ export default function ProjectSlider({projects}: {projects: Project[]}) {
     if (!el) return;
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     el.style.scrollBehavior = 'auto'; // we animate scrollLeft ourselves
-    el.style.paddingInline = `${EDGE}px`; // so a card at rest sits clear of the fade
+    el.style.paddingInline = EDGE; // so a card at rest sits clear of the fade
     pos.current = el.scrollLeft;
 
     // Keep in sync when the user drags/swipes the scroller themselves.
@@ -125,7 +125,7 @@ export default function ProjectSlider({projects}: {projects: Project[]}) {
   };
 
   const arrow = (side: 'left' | 'right') => (
-    <div style={{flex: 'none'}}>
+    <div className="slider-arrow" style={{flex: 'none'}}>
       <Button
         isIconOnly
         label={side === 'left' ? 'Previous project' : 'Next project'}
@@ -152,8 +152,8 @@ export default function ProjectSlider({projects}: {projects: Project[]}) {
         style={{
           outlineOffset: 4, flex: 1, minWidth: 0,
           // cards fade out at both ends instead of being cut off
-          WebkitMaskImage: `linear-gradient(to right, transparent, #000 ${EDGE}px, #000 calc(100% - ${EDGE}px), transparent)`,
-          maskImage: `linear-gradient(to right, transparent, #000 ${EDGE}px, #000 calc(100% - ${EDGE}px), transparent)`,
+          WebkitMaskImage: `linear-gradient(to right, transparent, #000 ${EDGE}, #000 calc(100% - ${EDGE}), transparent)`,
+          maskImage: `linear-gradient(to right, transparent, #000 ${EDGE}, #000 calc(100% - ${EDGE}), transparent)`,
         }}
         onFocus={() => { paused.current = true; }}
         onBlur={() => { paused.current = false; }}

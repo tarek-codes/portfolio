@@ -1,7 +1,6 @@
 import {memo, useEffect, useMemo, useRef, useState} from 'react';
 import gsap from 'gsap';
 import type {ReactNode} from 'react';
-import {Link as RouterLink} from 'react-router-dom';
 import {VStack} from '@astryxdesign/core/VStack';
 import {HStack} from '@astryxdesign/core/HStack';
 import {Grid} from '@astryxdesign/core/Grid';
@@ -15,24 +14,8 @@ import {Dialog, DialogHeader} from '@astryxdesign/core/Dialog';
 import {travel, playlists, watched, games, learning, type Place, type Spot} from '../content';
 import {BD_H, BD_W, DISTRICTS, projectBD} from '../bd-map';
 import {Section} from '../ui';
+import {InterestShell} from './shell';
 import {MusicalNoteIcon, FilmIcon, TvIcon, PuzzlePieceIcon, LightBulbIcon} from '@heroicons/react/24/outline';
-
-function InterestShell({title, intro, children}: {title: string; intro: string; children: ReactNode}) {
-  return (
-    <>
-      <VStack gap={4} paddingBlock={4}>
-        <div data-hero>
-          <RouterLink to="/" style={{color: 'inherit'}}>
-            <Text color="secondary">← Home</Text>
-          </RouterLink>
-        </div>
-        <div data-hero><Heading level={1} type="display-1" textWrap="balance">{title}</Heading></div>
-        <div data-hero><Text type="large" color="secondary" textWrap="balance">{intro}</Text></div>
-      </VStack>
-      {children}
-    </>
-  );
-}
 
 /* ---------------- Travelling ---------------- */
 
