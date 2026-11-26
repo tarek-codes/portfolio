@@ -1,0 +1,32 @@
+@import '@astryxdesign/core/reset.css';
+@import '@astryxdesign/core/astryx.css';
+
+/* Page colours. Light mode is a soft sand, not white. The real values live in src/palette.ts. */
+:root { --bg: light-dark(#e6dfcf, #121212); --fg: light-dark(#26231d, #ffffff); } /* fallback until App.tsx sets them from src/palette.ts */
+html { scroll-behavior: smooth; background: var(--bg); }
+a { text-underline-offset: 3px; }
+
+/* Section headers: the title sits inside a filled, rounded pill with its own colour (see TONES in ui.tsx). */
+.sec-pill {
+  display: inline-flex; align-items: center; gap: 12px; padding: 8px 24px 8px 16px; border-radius: 999px;
+  background: var(--pill-bg); color: var(--pill-fg);
+}
+.sec-pill h2 { margin: 0; color: inherit !important; font-size: clamp(22px, 3vw, 28px) !important; line-height: 1.15 !important; }
+.sec-pill svg { color: inherit; }
+
+/* Social buttons in their brand colours */
+.brand a, .brand button { transition: filter 0.2s ease, transform 0.2s ease; }
+.brand a:hover, .brand button:hover { filter: brightness(1.08); transform: translateY(-1px); }
+.brand-github  a, .brand-github  button { background: light-dark(#24292f, #f0f6fc) !important; color: light-dark(#ffffff, #0d1117) !important; }
+.brand-linkedin a, .brand-linkedin button { background: #0a66c2 !important; color: #ffffff !important; }
+.brand-leetcode a, .brand-leetcode button { background: #ffa116 !important; color: #1a1a1a !important; }
+.brand-x a, .brand-x button { background: light-dark(#000000, #ffffff) !important; color: light-dark(#ffffff, #000000) !important; }
+.brand a *, .brand button * { color: inherit; }
+
+/* Skills: each in its own colour (--c is set per pill). In dark mode the colour is lightened so very dark brands stay visible. */
+.skill {
+  --cc: light-dark(var(--c), color-mix(in srgb, var(--c) 55%, white));
+  display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 999px; font-size: 13px; font-weight: 600; line-height: 1.35;
+  color: var(--fg); background: color-mix(in srgb, var(--cc) 17%, transparent); border: 1px solid color-mix(in srgb, var(--cc) 45%, transparent);
+}
+.skill svg { color: var(--cc); }

@@ -1,0 +1,74 @@
+/* Page-wide rain theme switch. Adapted from Pin UI's Theme Switch (https://www.pinui.xyz/components/theme-switch).
+   The engine paints into this fixed, transparent, click-through overlay; the puddles are the next theme's page colour. */
+.pts {
+  --pts-ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  position: fixed;
+  inset: 0;
+  z-index: 2147483000;
+  width: 100vw;
+  height: 100dvh;
+  overflow: hidden;
+  isolation: isolate;
+  background: transparent;
+  pointer-events: none;
+}
+.pts *, .pts *::before, .pts *::after { box-sizing: border-box; }
+
+/* the theme switch icon in the nav */
+.pts-btn { display: inline-flex; }
+
+/* ── the effects' layers ───────────────────────────────────────────────── */
+
+/* under the controls: the flood, the puddles, the fireworks */
+.pts__flood,
+.pts__layer {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.pts__layer {
+  display: block;
+}
+
+/* over the controls: the drop, its ripples, the rain */
+.pts__fx {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.pts__fx .pts__layer {
+  z-index: auto;
+}
+
+.pts__drop {
+  position: absolute;
+  width: 22px;
+  height: 30px;
+  transform-origin: 50% 100%;
+  will-change: transform;
+}
+
+.pts__drop svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.pts__ripple {
+  position: absolute;
+  width: 54px;
+  height: 54px;
+  margin: -27px 0 0 -27px;
+  border: 1.5px solid currentColor;
+  border-radius: 50%;
+  opacity: 0;
+}
+

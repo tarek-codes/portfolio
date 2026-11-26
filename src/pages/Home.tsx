@@ -1,0 +1,186 @@
+import {VStack} from '@astryxdesign/core/VStack';
+import {HStack} from '@astryxdesign/core/HStack';
+import {Text} from '@astryxdesign/core/Text';
+import {Heading} from '@astryxdesign/core/Heading';
+import {Button} from '@astryxdesign/core/Button';
+import {Link} from '@astryxdesign/core/Link';
+import {Token} from '@astryxdesign/core/Token';
+import {Badge} from '@astryxdesign/core/Badge';
+import {Link as RouterLink} from 'react-router-dom';
+import {profile, about, experience, education, projects, skills, achievements} from '../content';
+import {Logo, Section, BulletList, SkillPill} from '../ui';
+import {Icon} from '@astryxdesign/core/Icon';
+import {Grid} from '@astryxdesign/core/Grid';
+import {brandIcons, skillIcons} from '../icons';
+import {UserCircleIcon, BriefcaseIcon, AcademicCapIcon, RectangleStackIcon, WrenchScrewdriverIcon, TrophyIcon} from '@heroicons/react/24/outline';
+import ProjectSlider from '../ProjectSlider';
+
+export default function Home() {
+  return (
+    <>
+      <VStack gap={4} paddingBlock={8}>
+        <div data-hero><Text color="secondary">{profile.location}</Text></div>
+        <div data-hero><Heading level={1} type="display-1" textWrap="balance">{profile.name}</Heading></div>
+        <div data-hero>
+          <HStack gap={3} wrap="wrap">
+            {profile.links.map((l) => (
+              <span key={l.label} className={`brand brand-${l.label.toLowerCase()}`}>
+              <Button
+                label={l.label}
+                variant="secondary"
+                href={l.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                icon={brandIcons[l.label as keyof typeof brandIcons] ? <Icon icon={brandIcons[l.label as keyof typeof brandIcons]} size="sm" color="inherit" /> : undefined}
+              />
+              </span>
+            ))}
+          </HStack>
+        </div>
+        <div data-hero><Text type="large" color="secondary" textWrap="balance">{profile.role}</Text></div>
+        <div data-hero><Text textWrap="pretty">{profile.summary}</Text></div>
+      </VStack>
+
+      <Section id="about" title="About Me" icon={UserCircleIcon}>
+        <div data-reveal>
+          <Grid columns={{minWidth: 280, max: 2}} gap={8} align="start">
+            <div style={{maxWidth: 340, width: '100%'}}>
+              <img
+                src={about.photo}
+                alt={`Portrait of ${profile.name}`}
+                style={{
+                  width: '100%', aspectRatio: '4 / 5', objectFit: 'cover', objectPosition: '55% 50%',
+                  borderRadius: 12, border: '1px solid rgba(128,128,128,0.35)', display: 'block',
+                }}
+              />
+            </div>
+            <VStack gap={4}>
+              {about.paragraphs.map((t) => <Text key={t} textWrap="pretty">{t}</Text>)}
+              <VStack gap={1.5}>
+                <Text color="secondary" size="sm">Professional Interests</Text>
+                <HStack gap={1.5} wrap="wrap">
+                  {about.interests.map((i) => <Token key={i} label={i} />)}
+                </HStack>
+              </VStack>
+              <VStack gap={1.5}>
+                <Text color="secondary" size="sm">Outside of Work</Text>
+                <HStack gap={1.5} wrap="wrap">
+                  {about.hobbies.map((h) =>
+                    h.to?.startsWith('#') ? (
+                      <a key={h.label} href={h.to} style={{textDecoration: 'none'}} aria-label={`${h.label}: jump to the section`}>
+                        <Badge label={`${h.label} →`} variant="neutral" />
+                      </a>
+                    ) : h.to ? (
+                      <RouterLink key={h.label} to={h.to} style={{textDecoration: 'none'}} aria-label={`${h.label}: open page`}>
+                        <Badge label={`${h.label} →`} variant="neutral" />
+                      </RouterLink>
+                    ) : (
+                      <Badge key={h.label} label={h.label} variant="neutral" />
+                    ),
+                  )}
+                </HStack>
+              </VStack>
+            </VStack>
+          </Grid>
+        </div>
+      </Section>
+
+      <Section id="experience" title="Experience" icon={BriefcaseIcon}>
+        <div data-stagger>
+          <VStack gap={8}>
+            {([['work', 'Work Experience'], ['research', 'Research Experience']] as const).map(([kind, label]) => (
+              <div key={kind} data-item>
+                <VStack gap={5}>
+                  <Text color="secondary" size="sm" weight="semibold">{label}</Text>
+                  {experience.filter((e) => e.kind === kind).map((e) => (
+                    <HStack key={e.org} gap={4} align="start">
+                      <Logo src={e.logo} name={e.org} bg={e.logoBg} initials={e.initials} />
+                      <VStack gap={1.5} width="100%">
+                        <HStack justify="between" wrap="wrap" gap={2}>
+                          <Text weight="semibold">{e.role}</Text>
+                          <Text color="secondary">{e.when}</Text>
+                        </HStack>
+                        <Text>{e.org} <Text color="secondary">· {e.where}</Text></Text>
+                        {e.points.length > 0 && <BulletList items={e.points} />}
+                      </VStack>
+                    </HStack>
+                  ))}
+                </VStack>
+              </div>
+            ))}
+          </VStack>
+        </div>
+      </Section>
+
+      <Section id="education" title="Education" icon={AcademicCapIcon}>
+        <div data-stagger>
+          <VStack gap={6}>
+            {education.map((e) => (
+              <div key={e.school} data-item>
+                <HStack gap={4} align="start">
+                  <Logo src={e.logo} name={e.school} bg={e.logoBg} initials={e.initials} />
+                  <VStack gap={1.5} width="100%">
+                    <HStack justify="between" wrap="wrap" gap={2}>
+                      <Text weight="semibold">{e.degree}</Text>
+                      <Text color="secondary">{e.when}</Text>
+                    </HStack>
+                    <Text>{e.school} <Text color="secondary">· {e.where}</Text></Text>
+                    {e.note && <Text textWrap="pretty">{e.note}</Text>}
+                  </VStack>
+                </HStack>
+              </div>
+            ))}
+          </VStack>
+        </div>
+      </Section>
+
+      <Section id="projects" title="Projects" icon={RectangleStackIcon}>
+        <div data-reveal><ProjectSlider projects={projects} /></div>
+      </Section>
+
+      <Section id="skills" title="Skills" icon={WrenchScrewdriverIcon}>
+        <div data-stagger>
+          <VStack gap={4}>
+            {skills.map((s) => (
+              <div key={s.group} data-item>
+                <VStack gap={1.5}>
+                  <Text color="secondary" size="sm">{s.group}</Text>
+                  <HStack gap={1.5} wrap="wrap">
+                    {s.items.map((i) => <SkillPill key={i} name={i} icon={skillIcons[i]} />)}
+                  </HStack>
+                </VStack>
+              </div>
+            ))}
+          </VStack>
+        </div>
+      </Section>
+
+      <Section id="achievements" title="Achievements & Certificates" icon={TrophyIcon}>
+        <div data-stagger>
+          <VStack gap={5}>
+            {achievements.map((a) => (
+              <div key={a.title} data-item>
+                <VStack gap={3}>
+                  <VStack gap={0.5}>
+                    <Link href={a.href} isExternalLink color="primary" hasUnderline weight="semibold">{a.title}</Link>
+                    <Text color="secondary">{a.note}</Text>
+                  </VStack>
+                  {a.image && (
+                    <a href={a.imageHref} target="_blank" rel="noopener noreferrer" style={{display: 'block'}}>
+                      <img
+                        src={a.image}
+                        alt={a.imageAlt}
+                        loading="lazy"
+                        style={{width: '100%', borderRadius: 12, border: '1px solid rgba(128,128,128,0.35)', display: 'block'}}
+                      />
+                    </a>
+                  )}
+                </VStack>
+              </div>
+            ))}
+          </VStack>
+        </div>
+      </Section>
+    </>
+  );
+}

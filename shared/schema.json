@@ -1,0 +1,693 @@
+{
+ "collections": {
+  "profile": {
+   "label": "Profile",
+   "kind": "object",
+   "fields": [
+    {
+     "key": "name",
+     "label": "Name",
+     "type": "text",
+     "required": true
+    },
+    {
+     "key": "role",
+     "label": "Headline",
+     "type": "text"
+    },
+    {
+     "key": "location",
+     "label": "Location",
+     "type": "text"
+    },
+    {
+     "key": "summary",
+     "label": "Summary",
+     "type": "textarea"
+    },
+    {
+     "key": "email",
+     "label": "Email",
+     "type": "text"
+    },
+    {
+     "key": "links",
+     "label": "Social links",
+     "type": "list",
+     "itemLabel": "label",
+     "fields": [
+      {
+       "key": "label",
+       "label": "Label",
+       "type": "text",
+       "required": true
+      },
+      {
+       "key": "href",
+       "label": "URL",
+       "type": "url",
+       "required": true
+      }
+     ]
+    }
+   ]
+  },
+  "about": {
+   "label": "About me",
+   "kind": "object",
+   "fields": [
+    {
+     "key": "photo",
+     "label": "Photo path or URL",
+     "type": "text"
+    },
+    {
+     "key": "paragraphs",
+     "label": "Paragraphs (one per line block)",
+     "type": "strings",
+     "multiline": true
+    },
+    {
+     "key": "hobbies",
+     "label": "Hobbies",
+     "type": "list",
+     "itemLabel": "label",
+     "fields": [
+      {
+       "key": "label",
+       "label": "Label",
+       "type": "text",
+       "required": true
+      },
+      {
+       "key": "to",
+       "label": "Link to page (optional, e.g. /interests/music)",
+       "type": "text"
+      }
+     ]
+    },
+    {
+     "key": "interests",
+     "label": "Professional interests (one per line)",
+     "type": "strings"
+    }
+   ]
+  },
+  "experience": {
+   "label": "Experience",
+   "kind": "list",
+   "titleKey": "org",
+   "subtitleKey": "role",
+   "fields": [
+    {
+     "key": "kind",
+     "label": "Group",
+     "type": "select",
+     "options": [
+      "work",
+      "research"
+     ],
+     "required": true
+    },
+    {
+     "key": "role",
+     "label": "Role",
+     "type": "text",
+     "required": true
+    },
+    {
+     "key": "org",
+     "label": "Organisation",
+     "type": "text",
+     "required": true
+    },
+    {
+     "key": "when",
+     "label": "Dates",
+     "type": "text"
+    },
+    {
+     "key": "where",
+     "label": "Place",
+     "type": "text"
+    },
+    {
+     "key": "logo",
+     "label": "Logo path or URL",
+     "type": "text"
+    },
+    {
+     "key": "logoBg",
+     "label": "Logo background (CSS colour)",
+     "type": "text"
+    },
+    {
+     "key": "initials",
+     "label": "Initials (if no logo)",
+     "type": "text"
+    },
+    {
+     "key": "points",
+     "label": "Bullet points (one per line)",
+     "type": "strings"
+    }
+   ]
+  },
+  "education": {
+   "label": "Education",
+   "kind": "list",
+   "titleKey": "school",
+   "subtitleKey": "degree",
+   "fields": [
+    {
+     "key": "degree",
+     "label": "Degree",
+     "type": "text",
+     "required": true
+    },
+    {
+     "key": "school",
+     "label": "School",
+     "type": "text",
+     "required": true
+    },
+    {
+     "key": "when",
+     "label": "Dates",
+     "type": "text"
+    },
+    {
+     "key": "where",
+     "label": "Place",
+     "type": "text"
+    },
+    {
+     "key": "note",
+     "label": "Note",
+     "type": "textarea"
+    },
+    {
+     "key": "logo",
+     "label": "Logo path or URL",
+     "type": "text"
+    },
+    {
+     "key": "logoBg",
+     "label": "Logo background (CSS colour)",
+     "type": "text"
+    },
+    {
+     "key": "initials",
+     "label": "Initials (if no logo)",
+     "type": "text"
+    }
+   ]
+  },
+  "projects": {
+   "label": "Projects",
+   "kind": "list",
+   "titleKey": "name",
+   "subtitleKey": "kind",
+   "fields": [
+    {
+     "key": "slug",
+     "label": "URL slug (a-z, 0-9, -)",
+     "type": "text",
+     "required": true
+    },
+    {
+     "key": "name",
+     "label": "Name",
+     "type": "text",
+     "required": true
+    },
+    {
+     "key": "kind",
+     "label": "Type",
+     "type": "text"
+    },
+    {
+     "key": "summary",
+     "label": "Short summary",
+     "type": "textarea"
+    },
+    {
+     "key": "overview",
+     "label": "Overview",
+     "type": "textarea"
+    },
+    {
+     "key": "highlights",
+     "label": "Highlights (one per line)",
+     "type": "strings"
+    },
+    {
+     "key": "stack",
+     "label": "Tech (one per line)",
+     "type": "strings"
+    },
+    {
+     "key": "hero",
+     "label": "Hero image path or URL",
+     "type": "text"
+    },
+    {
+     "key": "live",
+     "label": "Live site URL",
+     "type": "url"
+    },
+    {
+     "key": "code",
+     "label": "Code URL",
+     "type": "url"
+    },
+    {
+     "key": "shots",
+     "label": "Screenshots",
+     "type": "list",
+     "itemLabel": "page",
+     "fields": [
+      {
+       "key": "page",
+       "label": "Page name",
+       "type": "text",
+       "required": true
+      },
+      {
+       "key": "src",
+       "label": "Image path or URL",
+       "type": "text",
+       "required": true
+      },
+      {
+       "key": "href",
+       "label": "Page URL",
+       "type": "url"
+      }
+     ]
+    }
+   ]
+  },
+  "skills": {
+   "label": "Skills",
+   "kind": "list",
+   "titleKey": "group",
+   "fields": [
+    {
+     "key": "group",
+     "label": "Group",
+     "type": "text",
+     "required": true
+    },
+    {
+     "key": "items",
+     "label": "Skills (one per line)",
+     "type": "strings"
+    }
+   ]
+  },
+  "achievements": {
+   "label": "Achievements",
+   "kind": "list",
+   "titleKey": "title",
+   "subtitleKey": "note",
+   "fields": [
+    {
+     "key": "title",
+     "label": "Title",
+     "type": "text",
+     "required": true
+    },
+    {
+     "key": "note",
+     "label": "Note",
+     "type": "text"
+    },
+    {
+     "key": "href",
+     "label": "Link",
+     "type": "url"
+    },
+    {
+     "key": "image",
+     "label": "Image path or URL",
+     "type": "text"
+    },
+    {
+     "key": "imageAlt",
+     "label": "Image description",
+     "type": "text"
+    },
+    {
+     "key": "imageHref",
+     "label": "Image link",
+     "type": "url"
+    }
+   ]
+  },
+  "travel": {
+   "label": "Travel places",
+   "kind": "list",
+   "titleKey": "name",
+   "subtitleKey": "area",
+   "fields": [
+    {
+     "key": "id",
+     "label": "Id (a-z, 0-9, -)",
+     "type": "text",
+     "required": true
+    },
+    {
+     "key": "name",
+     "label": "Name",
+     "type": "text",
+     "required": true
+    },
+    {
+     "key": "area",
+     "label": "Area",
+     "type": "text"
+    },
+    {
+     "key": "lat",
+     "label": "Latitude",
+     "type": "number",
+     "required": true
+    },
+    {
+     "key": "district",
+     "label": "District (colours it on the map)",
+     "type": "select",
+     "options": [
+      "Bagerhat",
+      "Bandarban",
+      "Barguna",
+      "Barishal",
+      "Bhola",
+      "Bogura",
+      "Brahmanbaria",
+      "Chandpur",
+      "Chapai Nawabganj",
+      "Chattogram",
+      "Chuadanga",
+      "Cox's Bazar",
+      "Cumilla",
+      "Dhaka",
+      "Dinajpur",
+      "Faridpur",
+      "Feni",
+      "Gaibandha",
+      "Gazipur",
+      "Gopalganj",
+      "Habiganj",
+      "Jamalpur",
+      "Jashore",
+      "Jhalokati",
+      "Jhenaidah",
+      "Joypurhat",
+      "Khagrachhari",
+      "Khulna",
+      "Kishoreganj",
+      "Kurigram",
+      "Kushtia",
+      "Lakshmipur",
+      "Lalmonirhat",
+      "Madaripur",
+      "Magura",
+      "Manikganj",
+      "Meherpur",
+      "Moulvibazar",
+      "Munshiganj",
+      "Mymensingh",
+      "Naogaon",
+      "Narail",
+      "Narayanganj",
+      "Narsingdi",
+      "Natore",
+      "Netrokona",
+      "Nilphamari",
+      "Noakhali",
+      "Pabna",
+      "Panchagarh",
+      "Patuakhali",
+      "Pirojpur",
+      "Rajbari",
+      "Rajshahi",
+      "Rangamati",
+      "Rangpur",
+      "Satkhira",
+      "Shariatpur",
+      "Sherpur",
+      "Sirajganj",
+      "Sunamganj",
+      "Sylhet",
+      "Tangail",
+      "Thakurgaon"
+     ],
+     "required": true
+    },
+    {
+     "key": "lon",
+     "label": "Longitude",
+     "type": "number",
+     "required": true
+    },
+    {
+     "key": "spots",
+     "label": "Spots visited",
+     "type": "list",
+     "itemLabel": "name",
+     "fields": [
+      {
+       "key": "name",
+       "label": "Name",
+       "type": "text",
+       "required": true
+      },
+      {
+       "key": "lat",
+       "label": "Latitude",
+       "type": "number",
+       "required": true
+      },
+      {
+       "key": "lon",
+       "label": "Longitude",
+       "type": "number",
+       "required": true
+      },
+      {
+       "key": "district",
+       "label": "District",
+       "type": "select",
+       "options": [
+        "Bagerhat",
+        "Bandarban",
+        "Barguna",
+        "Barishal",
+        "Bhola",
+        "Bogura",
+        "Brahmanbaria",
+        "Chandpur",
+        "Chapai Nawabganj",
+        "Chattogram",
+        "Chuadanga",
+        "Cox's Bazar",
+        "Cumilla",
+        "Dhaka",
+        "Dinajpur",
+        "Faridpur",
+        "Feni",
+        "Gaibandha",
+        "Gazipur",
+        "Gopalganj",
+        "Habiganj",
+        "Jamalpur",
+        "Jashore",
+        "Jhalokati",
+        "Jhenaidah",
+        "Joypurhat",
+        "Khagrachhari",
+        "Khulna",
+        "Kishoreganj",
+        "Kurigram",
+        "Kushtia",
+        "Lakshmipur",
+        "Lalmonirhat",
+        "Madaripur",
+        "Magura",
+        "Manikganj",
+        "Meherpur",
+        "Moulvibazar",
+        "Munshiganj",
+        "Mymensingh",
+        "Naogaon",
+        "Narail",
+        "Narayanganj",
+        "Narsingdi",
+        "Natore",
+        "Netrokona",
+        "Nilphamari",
+        "Noakhali",
+        "Pabna",
+        "Panchagarh",
+        "Patuakhali",
+        "Pirojpur",
+        "Rajbari",
+        "Rajshahi",
+        "Rangamati",
+        "Rangpur",
+        "Satkhira",
+        "Shariatpur",
+        "Sherpur",
+        "Sirajganj",
+        "Sunamganj",
+        "Sylhet",
+        "Tangail",
+        "Thakurgaon"
+       ],
+       "required": true
+      }
+     ]
+    }
+   ]
+  },
+  "watched": {
+   "label": "Movies & series",
+   "kind": "list",
+   "titleKey": "title",
+   "subtitleKey": "year",
+   "fields": [
+    {
+     "key": "title",
+     "label": "Title",
+     "type": "text",
+     "required": true
+    },
+    {
+     "key": "year",
+     "label": "Year",
+     "type": "text"
+    },
+    {
+     "key": "kind",
+     "label": "Type",
+     "type": "select",
+     "options": [
+      "movie",
+      "series"
+     ],
+     "required": true
+    },
+    {
+     "key": "poster",
+     "label": "Poster URL",
+     "type": "url"
+    },
+    {
+     "key": "rating",
+     "label": "Rating (0 to 5)",
+     "type": "number",
+     "min": 0,
+     "max": 5,
+     "step": 0.5
+    },
+    {
+     "key": "note",
+     "label": "Note",
+     "type": "textarea"
+    },
+    {
+     "key": "link",
+     "label": "Link (Letterboxd / TMDB)",
+     "type": "url"
+    },
+    {
+     "key": "watchedOn",
+     "label": "Watched on (date)",
+     "type": "text"
+    }
+   ]
+  },
+  "playlists": {
+   "label": "Playlists",
+   "kind": "list",
+   "titleKey": "name",
+   "fields": [
+    {
+     "key": "name",
+     "label": "Name",
+     "type": "text",
+     "required": true
+    },
+    {
+     "key": "description",
+     "label": "Description",
+     "type": "textarea"
+    },
+    {
+     "key": "href",
+     "label": "Playlist link",
+     "type": "url"
+    },
+    {
+     "key": "embed",
+     "label": "Embed URL (https, optional)",
+     "type": "embed"
+    }
+   ]
+  },
+  "games": {
+   "label": "Video games",
+   "kind": "list",
+   "titleKey": "title",
+   "subtitleKey": "platform",
+   "fields": [
+    {
+     "key": "title",
+     "label": "Title",
+     "type": "text",
+     "required": true
+    },
+    {
+     "key": "platform",
+     "label": "Platform",
+     "type": "text"
+    },
+    {
+     "key": "note",
+     "label": "Note",
+     "type": "textarea"
+    },
+    {
+     "key": "cover",
+     "label": "Cover image URL",
+     "type": "url"
+    }
+   ]
+  },
+  "learning": {
+   "label": "Learning",
+   "kind": "list",
+   "titleKey": "title",
+   "fields": [
+    {
+     "key": "title",
+     "label": "Topic",
+     "type": "text",
+     "required": true
+    },
+    {
+     "key": "note",
+     "label": "What I'm doing with it",
+     "type": "textarea"
+    },
+    {
+     "key": "tags",
+     "label": "Tags (one per line)",
+     "type": "strings"
+    }
+   ]
+  }
+ }
+}
