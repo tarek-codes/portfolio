@@ -32,13 +32,40 @@ export function useMotion(routeKey: string) {
     };
     document.addEventListener('click', onClick);
 
+    // What is already on screen when the page opens at the top needs no entrance effect: it just appears.
+    const firstScreen = (el: Element) => el.getBoundingClientRect().top + window.scrollY < window.innerHeight * 0.88;
+    const below = (el: HTMLElement) => !firstScreen(el);
+
     const ctx = gsap.context(() => {
-      if (document.querySelector('[data-hero]')) gsap.from('[data-hero]', {y: 28, opacity: 0, duration: 0.9, ease: 'power3.out', stagger: 0.1, delay: 0.1});
-      gsap.utils.toArray<HTMLElement>('[data-reveal]').forEach((el) => {
+      gsap.utils.toArray<HTMLElement>('[data-reveal]').filter(below).forEach((el) => {
         gsap.from(el, {
           y: 32, opacity: 0, duration: 0.8, ease: 'power3.out',
           scrollTrigger: {trigger: el, start: 'top 88%', once: true},
         });
+      });
+      // Section headers: the icon is drawn stroke by stroke, then the title is typed out, as each one scrolls into view
+      // (About Me too: it is on screen at the start, so it plays as soon as the page opens).
+      gsap.utils.toArray<HTMLElement>('.sec-pill').forEach((pill) => {
+        const title = pill.querySelector<HTMLElement>('h2');
+        const paths = Array.from(pill.querySelectorAll<SVGGeometryElement>('svg path, svg circle, svg line, svg polyline, svg rect'));
+        const tl = gsap.timeline({scrollTrigger: {trigger: pill, start: 'top 88%', once: true}});
+        paths.forEach((p) => {
+          const len = typeof p.getTotalLength === 'function' ? p.getTotalLength() : 0;
+          if (!len) return;
+          p.style.strokeDasharray = String(len);
+          tl.fromTo(p, {strokeDashoffset: len}, {
+            strokeDashoffset: 0, duration: 1.2, ease: 'power2.inOut',
+            onComplete: () => { p.style.strokeDasharray = ''; p.style.strokeDashoffset = ''; },
+          }, 0);
+        });
+        if (title) {
+          const chars = Math.max(1, (title.textContent ?? '').length);
+          // revealed in steps, one per character: reads as typing without touching the text itself
+          tl.fromTo(title, {clipPath: 'inset(0 100% 0 0)'}, {
+            clipPath: 'inset(0 0% 0 0)', duration: chars * 0.085, ease: `steps(${chars})`,
+            onComplete: () => { title.style.clipPath = ''; },
+          }, 0.45);
+        }
       });
       // Footer: blocks rise in, the giant wordmark's letters slide up from behind their masks.
       if (document.querySelector('[data-footer]')) {
@@ -51,7 +78,7 @@ export function useMotion(routeKey: string) {
           scrollTrigger: {trigger: '.tf-word', start: 'top 98%', once: true},
         });
       }
-      gsap.utils.toArray<HTMLElement>('[data-stagger]').forEach((group) => {
+      gsap.utils.toArray<HTMLElement>('[data-stagger]').filter(below).forEach((group) => {
         gsap.from(group.querySelectorAll('[data-item]'), {
           y: 32, opacity: 0, duration: 0.7, ease: 'power3.out', stagger: 0.08,
           scrollTrigger: {trigger: group, start: 'top 85%', once: true},

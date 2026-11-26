@@ -16,8 +16,8 @@ export const profile = {
 export const about = {
   photo: '/img_trk.jpeg',
   paragraphs: [
-    'Hi, I\u2019m Tarek, though my close ones call me Shrabon. First impressions say quiet and serious; ten minutes later I\u2019m usually the one cracking jokes in the group chat. Making people laugh is my favourite thing, and I promise I\u2019m a lot more fun once you get to know me.',
-    'I\u2019ll happily build anything with code, from web apps to AI to civic tech, and I love a good challenge, so you\u2019ll often find me solving problems on LeetCode or racing the clock at hackathons.',
+    'I’m Tarek, or Shrabon to the people who know me best. I’m a software engineer from Dhaka who’s happiest when a messy idea turns into something that actually works, and who would rather ship it than just talk about it.',
+    'Away from the keyboard you’ll find me exploring Bangladesh, lost in a playlist, or halfway through another series. And somewhere in the group chat, I’m usually the one making everyone laugh.',
   ],
   // Personal interests, shown as highlighted pills.
   hobbies: [
@@ -32,9 +32,7 @@ export const about = {
     'Backend & APIs',
     'Machine Learning',
     'NLP',
-    'Medical AI',
     'Data Engineering',
-    'Civic Tech',
     'System Design',
     'Hackathons',
   ],

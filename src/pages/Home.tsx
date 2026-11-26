@@ -10,7 +10,6 @@ import {Link as RouterLink} from 'react-router-dom';
 import {profile, about, experience, education, projects, skills, achievements} from '../content';
 import {Logo, Section, BulletList, SkillPill} from '../ui';
 import {Icon} from '@astryxdesign/core/Icon';
-import {Grid} from '@astryxdesign/core/Grid';
 import {brandIcons, skillIcons} from '../icons';
 import {UserCircleIcon, BriefcaseIcon, AcademicCapIcon, RectangleStackIcon, WrenchScrewdriverIcon, TrophyIcon} from '@heroicons/react/24/outline';
 import ProjectSlider from '../ProjectSlider';
@@ -42,8 +41,9 @@ export default function Home() {
 
       <Section id="about" title="About Me" icon={UserCircleIcon}>
         <div data-reveal>
-          <Grid columns={{minWidth: 280, max: 2}} gap={8} align="start">
-            <div style={{maxWidth: 340, width: '100%'}}>
+          {/* photo and text sit together, vertically centred; they stack on narrow screens */}
+          <div style={{display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 56}}>
+            <div style={{flex: '0 0 auto', width: 'min(100%, 320px)'}}>
               <img
                 src={about.photo}
                 alt={`Portrait of ${profile.name}`}
@@ -53,7 +53,7 @@ export default function Home() {
                 }}
               />
             </div>
-            <VStack gap={5}>
+            <VStack gap={5} style={{flex: '1 1 340px', minWidth: 0}}>
               {about.paragraphs.map((t) => <Text key={t} textWrap="pretty">{t}</Text>)}
               <VStack gap={1.5}>
                 <Text color="secondary" size="sm">Professional Interests</Text>
@@ -80,7 +80,7 @@ export default function Home() {
                 </HStack>
               </VStack>
             </VStack>
-          </Grid>
+          </div>
         </div>
       </Section>
 

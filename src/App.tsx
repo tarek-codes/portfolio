@@ -1,5 +1,5 @@
 import {useEffect, useState} from 'react';
-import {BrowserRouter, Route, Routes, useLocation, useNavigate} from 'react-router-dom';
+import {BrowserRouter, Route, Routes, useLocation} from 'react-router-dom';
 import {Theme} from '@astryxdesign/core/theme';
 import {Layout, LayoutContent} from '@astryxdesign/core/Layout';
 import {VStack} from '@astryxdesign/core/VStack';
@@ -32,7 +32,6 @@ function Shell() {
     document.documentElement.style.setProperty('--fg', c.ink);
   }, [mode]);
   useContentVersion(); // re-render when edited content arrives
-  const navigate = useNavigate();
   const isHome = pathname === '/';
   useMotion(pathname);
 
@@ -54,26 +53,23 @@ function Shell() {
         content={
           <LayoutContent role="main" padding={6}>
             <VStack gap={10} style={page}>
-              <div style={{display: 'grid', gridTemplateColumns: '1fr auto 1fr', alignItems: 'center', gap: 8}}>
-                <div />
-                <HStack gap={2} align="center" wrap="wrap" justify="center">
-                  {isHome ? (
-                    <>
-                      <Button label="About" variant="ghost" href="#about" />
-                      <Button label="Experience" variant="ghost" href="#experience" />
-                      <Button label="Education" variant="ghost" href="#education" />
-                      <Button label="Projects" variant="ghost" href="#projects" />
-                      <Button label="Skills" variant="ghost" href="#skills" />
-                      <Button label="Achievements" variant="ghost" href="#achievements" />
-                    </>
-                  ) : (
-                    <Button label="Home" variant="ghost" onClick={() => navigate('/')} />
-                  )}
-                </HStack>
-                <HStack justify="end" align="center">
-                  <ThemeToggle mode={mode} onChange={setMode} />
-                </HStack>
-              </div>
+              {/* the top bar (section links + theme switch) is for the home page only */}
+              {isHome && (
+                <div style={{display: 'grid', gridTemplateColumns: '1fr auto 1fr', alignItems: 'center', gap: 8}}>
+                  <div />
+                  <HStack gap={2} align="center" wrap="wrap" justify="center">
+                    <Button label="About" variant="ghost" href="#about" />
+                    <Button label="Experience" variant="ghost" href="#experience" />
+                    <Button label="Education" variant="ghost" href="#education" />
+                    <Button label="Projects" variant="ghost" href="#projects" />
+                    <Button label="Skills" variant="ghost" href="#skills" />
+                    <Button label="Achievements" variant="ghost" href="#achievements" />
+                  </HStack>
+                  <HStack justify="end" align="center">
+                    <ThemeToggle mode={mode} onChange={setMode} />
+                  </HStack>
+                </div>
+              )}
               <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/projects/:slug" element={<ProjectPage />} />

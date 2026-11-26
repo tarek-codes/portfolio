@@ -6,10 +6,10 @@
 html { scroll-behavior: smooth; background: var(--bg); }
 a { text-underline-offset: 3px; }
 
-/* Section headers: the title sits inside a filled, rounded pill with its own colour (see TONES in ui.tsx). */
+/* Section headers: plain text and icon in the section's own colour (see TONES in ui.tsx); no filled pill. */
 .sec-pill {
-  display: inline-flex; align-items: center; gap: 12px; padding: 8px 24px 8px 16px; border-radius: 999px;
-  background: var(--pill-bg); color: var(--pill-fg);
+  display: inline-flex; align-items: center; gap: 12px; padding: 0;
+  color: var(--pill-fg);
 }
 .sec-pill h2 { margin: 0; color: inherit !important; font-size: clamp(22px, 3vw, 28px) !important; line-height: 1.15 !important; }
 .sec-pill svg { color: inherit; }
