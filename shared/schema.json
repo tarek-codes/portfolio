@@ -552,6 +552,31 @@
         "Thakurgaon"
        ],
        "required": true
+      },
+      {
+       "key": "fact",
+       "label": "Interesting fact (shown in the popup)",
+       "type": "textarea"
+      },
+      {
+       "key": "image",
+       "label": "Popup hero image (path or URL)",
+       "type": "text"
+      },
+      {
+       "key": "imageAlt",
+       "label": "Hero image description",
+       "type": "text"
+      },
+      {
+       "key": "imageCredit",
+       "label": "Image credit",
+       "type": "text"
+      },
+      {
+       "key": "imageCreditHref",
+       "label": "Image credit link",
+       "type": "url"
       }
      ]
     }

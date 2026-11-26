@@ -11,7 +11,8 @@ import {Card} from '@astryxdesign/core/Card';
 import {Link} from '@astryxdesign/core/Link';
 import {Button} from '@astryxdesign/core/Button';
 import {Token} from '@astryxdesign/core/Token';
-import {travel, playlists, watched, games, learning, type Place} from '../content';
+import {Dialog, DialogHeader} from '@astryxdesign/core/Dialog';
+import {travel, playlists, watched, games, learning, type Place, type Spot} from '../content';
 import {BD_H, BD_W, DISTRICTS, projectBD} from '../bd-map';
 import {Section} from '../ui';
 import {MusicalNoteIcon, FilmIcon, TvIcon, PuzzlePieceIcon, LightBulbIcon} from '@heroicons/react/24/outline';
@@ -21,8 +22,8 @@ function InterestShell({title, intro, children}: {title: string; intro: string; 
     <>
       <VStack gap={4} paddingBlock={4}>
         <div data-hero>
-          <RouterLink to="/" state={{scroll: 'about'}} style={{color: 'inherit'}}>
-            <Text color="secondary">← About Me</Text>
+          <RouterLink to="/" style={{color: 'inherit'}}>
+            <Text color="secondary">← Home</Text>
           </RouterLink>
         </div>
         <div data-hero><Heading level={1} type="display-1" textWrap="balance">{title}</Heading></div>
@@ -86,6 +87,8 @@ export function TravelPage() {
   const [spot, setSpot] = useState<string | null>(null); // a spot being pointed at
   const [hover, setHover] = useState<string | null>(null); // a district being pointed at
   const [view, setView] = useState<View>(FULL);
+  const [factSpot, setFactSpot] = useState<{place: Place; spot: Spot} | null>(null); // the spot whose popup (fact + hero image) is open
+  const openSpot = (p: Place, sp: Spot) => { if (sp.fact) setFactSpot({place: p, spot: sp}); };
   const cur = useRef<View>({...FULL});
   const tween = useRef<gsap.core.Tween | null>(null);
   const mapBox = useRef<HTMLDivElement | null>(null);
@@ -182,7 +185,9 @@ export function TravelPage() {
                       role="button"
                       tabIndex={0}
                       aria-label={s.name}
-                      style={{cursor: 'pointer', outline: 'none'}}
+                      style={{cursor: s.fact ? 'pointer' : 'default', outline: 'none'}}
+                      onClick={() => openSpot(place, s)}
+                      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openSpot(place, s); } }}
                       onMouseEnter={() => setSpot(s.name)}
                       onMouseLeave={() => setSpot(null)}
                       onFocus={() => setSpot(s.name)}
@@ -208,7 +213,7 @@ export function TravelPage() {
           </div>
 
           <div style={{width: '100%', maxWidth: 640, marginInline: 'auto'}}>
-            <Text color="secondary" size="sm" style={{marginBottom: 10, textAlign: 'center'}}>{place ? 'Showing the places I visited here. Pick another, or tap it again to go back to the whole map.' : 'Pick a place to zoom in and see where I went. You can also tap a green district on the map.'}</Text>
+            <Text color="secondary" size="sm" style={{marginBottom: 10, textAlign: 'center'}}>{place ? 'Tap a spot to see a picture and an interesting fact about it. Tap the place again to go back to the whole map.' : 'Pick a place to zoom in, then tap any spot to see a picture and an interesting fact. You can also tap a green district on the map.'}</Text>
             {/* one compact line per place, so the list stays short however many places are added */}
             <ul style={{listStyle: 'none', margin: 0, padding: 0, display: 'flex', flexDirection: 'column'}}>
               {travel.map((p, idx) => {
@@ -235,9 +240,18 @@ export function TravelPage() {
                             key={s2.name}
                             onMouseEnter={() => setSpot(s2.name)}
                             onMouseLeave={() => setSpot(null)}
-                            style={{display: 'flex', alignItems: 'center', gap: 8, padding: '4px 0', breakInside: 'avoid', fontSize: 15, opacity: !spot || spot === s2.name ? 1 : 0.45, transition: 'opacity 0.2s ease'}}>
-                            <span aria-hidden="true" style={{flex: 'none', width: 20, height: 20, borderRadius: 999, display: 'grid', placeItems: 'center', fontSize: 11, fontWeight: 700, background: 'var(--fg)', color: 'var(--bg)'}}>{i + 1}</span>
-                            <span>{s2.name}</span>
+                            style={{breakInside: 'avoid', opacity: !spot || spot === s2.name ? 1 : 0.45, transition: 'opacity 0.2s ease'}}>
+                            <button
+                              type="button"
+                              className="spot-btn"
+                              aria-haspopup={s2.fact ? 'dialog' : undefined}
+                              disabled={!s2.fact}
+                              onClick={() => openSpot(p, s2)}
+                              style={{display: 'flex', alignItems: 'center', gap: 8, width: '100%', padding: '4px 0', border: 0, background: 'transparent', color: 'inherit', font: 'inherit', fontSize: 15, textAlign: 'left', cursor: s2.fact ? 'pointer' : 'default'}}>
+                              <span aria-hidden="true" style={{flex: 'none', width: 20, height: 20, borderRadius: 999, display: 'grid', placeItems: 'center', fontSize: 11, fontWeight: 700, background: 'var(--fg)', color: 'var(--bg)'}}>{i + 1}</span>
+                              <span className="spot-name">{s2.name}</span>
+                              {s2.fact && <span aria-hidden="true" style={{marginLeft: 'auto', fontSize: 13, opacity: 0.6}}>→</span>}
+                            </button>
                           </li>
                         ))}
                       </ol>
@@ -251,6 +265,36 @@ export function TravelPage() {
           </div>
         </VStack>
       </div>
+
+      <Dialog isOpen={Boolean(factSpot)} onOpenChange={(open) => { if (!open) setFactSpot(null); }} width={560} padding={0}>
+        {factSpot && (
+          <>
+            <div style={{padding: '12px 16px 12px 20px'}}>
+              <DialogHeader title={factSpot.spot.name} subtitle={`${factSpot.place.name} · ${factSpot.place.area}`} hasDivider={false} onOpenChange={(open) => { if (!open) setFactSpot(null); }} />
+            </div>
+            {factSpot.spot.image && (
+              <img
+                src={factSpot.spot.image}
+                alt={factSpot.spot.imageAlt ?? factSpot.spot.name}
+                style={{width: '100%', aspectRatio: '16 / 9', objectFit: 'cover', display: 'block'}}
+              />
+            )}
+            <div style={{padding: 20}}>
+              <VStack gap={2}>
+                <Text color="secondary" size="sm" weight="semibold">Did you know?</Text>
+                <Text textWrap="pretty">{factSpot.spot.fact}</Text>
+                {factSpot.spot.imageCredit && (
+                  <Text color="secondary" size="sm">
+                    {factSpot.spot.imageCreditHref
+                      ? <Link href={factSpot.spot.imageCreditHref} isExternalLink color="secondary" hasUnderline>{factSpot.spot.imageCredit}</Link>
+                      : factSpot.spot.imageCredit}
+                  </Text>
+                )}
+              </VStack>
+            </div>
+          </>
+        )}
+      </Dialog>
     </InterestShell>
   );
 }

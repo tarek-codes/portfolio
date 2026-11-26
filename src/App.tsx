@@ -15,6 +15,7 @@ import Footer from './Footer';
 import {TravelPage, MusicPage, WatchingPage, GamingPage, LearningPage} from './pages/Interests';
 import ThemeToggle from './ThemeToggle';
 import SectionRail from './SectionRail';
+import {toneStyle} from './ui';
 import {useContentVersion} from './remote';
 import AdminPage from './admin/AdminPage';
 
@@ -24,7 +25,7 @@ function Shell() {
   const [mode, setMode] = useState<'light' | 'dark'>(
     window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light',
   );
-  const {pathname, state} = useLocation();
+  const {pathname} = useLocation();
   useEffect(() => {
     const c = mode === 'dark' ? DARK : LIGHT;
     document.documentElement.style.backgroundColor = c.bg;
@@ -35,17 +36,17 @@ function Shell() {
   const isHome = pathname === '/';
   useMotion(pathname);
 
-  // New route: jump to top, or to the section the link asked for.
+  // Every new page opens at the very top, whichever way you got there (link, back button, refresh).
   useEffect(() => {
-    const target = (state as {scroll?: string} | null)?.scroll;
+    if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
     const go = () => {
-      const el = target ? document.getElementById(target) : null;
       const lenis = getLenis();
-      if (el) lenis ? lenis.scrollTo(el, {immediate: true, offset: -24}) : el.scrollIntoView();
-      else lenis ? lenis.scrollTo(0, {immediate: true}) : window.scrollTo(0, 0);
+      if (lenis) lenis.scrollTo(0, {immediate: true});
+      window.scrollTo(0, 0);
     };
+    go();
     requestAnimationFrame(go);
-  }, [pathname, state]);
+  }, [pathname]);
 
   return (
     <Theme theme={siteTheme} mode={mode}>
@@ -58,12 +59,12 @@ function Shell() {
                 <div style={{display: 'grid', gridTemplateColumns: '1fr auto 1fr', alignItems: 'center', gap: 8}}>
                   <div />
                   <HStack gap={2} align="center" wrap="wrap" justify="center">
-                    <Button label="About" variant="ghost" href="#about" />
-                    <Button label="Experience" variant="ghost" href="#experience" />
-                    <Button label="Education" variant="ghost" href="#education" />
-                    <Button label="Projects" variant="ghost" href="#projects" />
-                    <Button label="Skills" variant="ghost" href="#skills" />
-                    <Button label="Achievements" variant="ghost" href="#achievements" />
+                    <span className="nav-sec" style={toneStyle('about')}><Button label="About" variant="ghost" href="#about" /></span>
+                    <span className="nav-sec" style={toneStyle('experience')}><Button label="Experience" variant="ghost" href="#experience" /></span>
+                    <span className="nav-sec" style={toneStyle('education')}><Button label="Education" variant="ghost" href="#education" /></span>
+                    <span className="nav-sec" style={toneStyle('projects')}><Button label="Projects" variant="ghost" href="#projects" /></span>
+                    <span className="nav-sec" style={toneStyle('skills')}><Button label="Skills" variant="ghost" href="#skills" /></span>
+                    <span className="nav-sec" style={toneStyle('achievements')}><Button label="Achievements" variant="ghost" href="#achievements" /></span>
                   </HStack>
                   <HStack justify="end" align="center">
                     <ThemeToggle mode={mode} onChange={setMode} />

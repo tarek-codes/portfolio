@@ -25,8 +25,8 @@ export default function ProjectPage() {
     <>
       <VStack gap={4} paddingBlock={4}>
         <div data-hero>
-          <RouterLink to="/" state={{scroll: 'projects'}} style={{color: 'inherit'}}>
-            <Text color="secondary">← All Projects</Text>
+          <RouterLink to="/" style={{color: 'inherit'}}>
+            <Text color="secondary">← Home</Text>
           </RouterLink>
         </div>
         <div data-hero><Text color="secondary">{p.kind}</Text></div>

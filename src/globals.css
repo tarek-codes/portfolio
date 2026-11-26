@@ -30,3 +30,12 @@ a { text-underline-offset: 3px; }
   color: var(--fg); background: color-mix(in srgb, var(--cc) 17%, transparent); border: 1px solid color-mix(in srgb, var(--cc) 45%, transparent);
 }
 .skill svg { color: var(--cc); }
+
+/* Travelling: a spot you can open reads as a link on hover */
+.spot-btn:not(:disabled):hover .spot-name, .spot-btn:not(:disabled):focus-visible .spot-name { text-decoration: underline; text-underline-offset: 3px; }
+
+/* Top bar: hovering a section link fills it with that section's own colour (the colour of its header) */
+.nav-sec a, .nav-sec button { transition: background 0.2s ease, color 0.2s ease; }
+.nav-sec a:hover, .nav-sec a:focus-visible, .nav-sec button:hover, .nav-sec button:focus-visible {
+  background: var(--pill-bg) !important; color: var(--pill-fg) !important;
+}

@@ -4,6 +4,8 @@ import {ScrollTrigger} from 'gsap/ScrollTrigger';
 import Lenis from 'lenis';
 
 gsap.registerPlugin(ScrollTrigger);
+// ScrollTrigger puts the browser's own scroll restoration back to 'auto' on load; keep it manual so going back never lands mid-page.
+ScrollTrigger.clearScrollMemory('manual');
 
 /** Lenis smooth scroll driven by GSAP's ticker, plus scroll-triggered reveals. */
 let current: Lenis | null = null;
