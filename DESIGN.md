@@ -46,6 +46,6 @@ Every section title has a Heroicons (outline) icon before it, set through the `i
 - Learning is its own page (`/interests/learning`, linked from the "Learning New Technologies" pill), data-driven from `learning` in `src/content.ts`, editable in /admin. It is not a section on the home page.
 
 ## Colours
-- All page colours live in **one file: `src/palette.ts`**. Light mode is a soft sand, not white: page `#e6dfcf`, cards `#efe9db`, chips `#d8d0bd`, ink `#26231d` (11.8:1 on the page), secondary text `#4f483c` (6.8:1). Dark mode is `#121212`. Change a colour there and the Astryx theme (`src/theme.ts`), the `<html>` background / `--bg` / `--fg` (set in `App.tsx`) and the theme-change flood (`src/theme-rain/engine.ts`, which must match the page exactly or it would flash) all follow.
-- In custom CSS use `var(--bg)` / `var(--fg)` (not `Canvas`/`CanvasText`, which are pure white/black). Avoid hard-coded `#fff` backgrounds.
+- All page colours live in **one file: `src/palette.ts`**. Light mode is plain white: page `#ffffff`, cards `#f5f5f5`, chips `#ebebeb`, ink pure black `#000000` (21:1 on the page), secondary text `#3d3d3d` (11.2:1). Dark mode is `#121212`. Change a colour there and the Astryx theme (`src/theme.ts`), the `<html>` background / `--bg` / `--fg` (set in `App.tsx`) and the theme-change flood (`src/theme-rain/engine.ts`, which must match the page exactly or it would flash) all follow.
+- In custom CSS use `var(--bg)` / `var(--fg)` (not `Canvas`/`CanvasText`, which are pure white/black). Avoid hard-coded backgrounds; use the palette.
 - Skills are pills in their own colour (`SkillPill` in `src/ui.tsx`, colours in `src/icons.tsx`): the brand colour when known, otherwise a steady colour derived from the skill's name.

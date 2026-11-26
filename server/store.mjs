@@ -5,6 +5,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 
 const KEY = 'portfolio:content';
+const VISITORS_KEY = 'portfolio:visitors';
 
 function fileStore(file) {
   const read = async () => {
@@ -30,6 +31,33 @@ function fileStore(file) {
       delete d.collections[name];
       d.updatedAt = new Date().toISOString();
       await write(d);
+    },
+    ...fileVisitors(path.join(path.dirname(file), 'visitors.json')),
+  };
+}
+
+/** Unique visitors: a set of hashed ids, kept apart from the content so edits and visits never overwrite each other. */
+function fileVisitors(file) {
+  let queue = Promise.resolve(); // writes are serialised so two visits at once can't lose one
+  const read = async () => {
+    try { return new Set(JSON.parse(await fs.readFile(file, 'utf8')).ids || []); } catch { return new Set(); }
+  };
+  return {
+    countVisitors: async () => (await read()).size,
+    addVisitor(hash) {
+      const job = queue.then(async () => {
+        const ids = await read();
+        if (!ids.has(hash)) {
+          ids.add(hash);
+          await fs.mkdir(path.dirname(file), {recursive: true});
+          const tmp = `${file}.${process.pid}.tmp`;
+          await fs.writeFile(tmp, JSON.stringify({ids: [...ids]}));
+          await fs.rename(tmp, file);
+        }
+        return ids.size;
+      });
+      queue = job.catch(() => {});
+      return job;
     },
   };
 }
@@ -60,6 +88,16 @@ function upstashStore(url, token) {
       delete d.collections[name];
       d.updatedAt = new Date().toISOString();
       await write(d);
+    },
+    async countVisitors() {
+      const r = await fetch(url, {method: 'POST', headers, body: JSON.stringify(['SCARD', VISITORS_KEY])});
+      if (!r.ok) throw new Error(`Storage read failed (${r.status})`);
+      return Number((await r.json()).result) || 0;
+    },
+    async addVisitor(hash) {
+      const r = await fetch(url, {method: 'POST', headers, body: JSON.stringify(['SADD', VISITORS_KEY, hash])});
+      if (!r.ok) throw new Error(`Storage write failed (${r.status})`);
+      return this.countVisitors();
     },
   };
 }

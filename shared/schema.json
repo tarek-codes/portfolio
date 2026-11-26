@@ -16,11 +16,6 @@
      "type": "text"
     },
     {
-     "key": "location",
-     "label": "Location",
-     "type": "text"
-    },
-    {
      "key": "summary",
      "label": "Summary",
      "type": "textarea"
@@ -322,6 +317,16 @@
      "key": "note",
      "label": "Note",
      "type": "text"
+    },
+    {
+     "key": "group",
+     "label": "Group",
+     "type": "select",
+     "options": [
+      "Hackathons",
+      "Certifications",
+      "Training"
+     ]
     },
     {
      "key": "href",

@@ -37,7 +37,7 @@ function InterestShell({title, intro, children}: {title: string; intro: string; 
 
 const ink = (pct: number) => `color-mix(in srgb, var(--fg) ${pct}%, transparent)`;
 const VISITED = 'light-dark(#10b981, #34d399)'; // map fill
-const VISITED_TEXT = 'light-dark(#047857, #34d399)'; // the same green, deep enough to read as text on the sand page
+const VISITED_TEXT = 'light-dark(#047857, #34d399)'; // the same green, deep enough to read as text on the white page
 type View = {x: number; y: number; w: number};
 const FULL: View = {x: 0, y: 0, w: BD_W};
 
@@ -88,6 +88,7 @@ export function TravelPage() {
   const [view, setView] = useState<View>(FULL);
   const cur = useRef<View>({...FULL});
   const tween = useRef<gsap.core.Tween | null>(null);
+  const mapBox = useRef<HTMLDivElement | null>(null);
 
   // every district that has a place or a spot in it
   const visited = useMemo(() => {
@@ -99,6 +100,9 @@ export function TravelPage() {
   const zoomTo = (id: string | null) => {
     setFocus(id);
     setSpot(null);
+    // the list sits below the map: if the map has scrolled out of view, bring it back so the zoom is seen
+    const box = mapBox.current?.getBoundingClientRect();
+    if (id && box && (box.top < 0 || box.bottom > window.innerHeight)) mapBox.current?.scrollIntoView({behavior: 'smooth', block: 'center'});
     const place = travel.find((p) => p.id === id);
     const to = place ? frame(place) : FULL;
     tween.current?.kill();
@@ -129,26 +133,26 @@ export function TravelPage() {
   return (
     <InterestShell
       title="Travelling"
-      intro="I love getting out of Dhaka. This map colours in the districts of Bangladesh I have visited. Pick a place to zoom in on the spots.">
+      intro="I love getting out of Dhaka. This map colours in the districts of Bangladesh I have visited.">
       <div data-reveal>
-        <Grid columns={{minWidth: 300, max: 2}} gap={8} align="start">
-          <div style={{maxWidth: 460, width: '100%', marginInline: 'auto', position: 'sticky', top: 24}}>
+        <VStack gap={8}>
+          <div style={{maxWidth: 520, width: '100%', marginInline: 'auto'}}>
             {/* the running count, like Unseen Bangladesh */}
             <div style={{marginBottom: 12}}>
-              <div style={{display: 'flex', alignItems: 'baseline', gap: 8}}>
+              <div style={{display: 'flex', alignItems: 'baseline', justifyContent: 'center', gap: 8}}>
                 <span style={{fontSize: 34, fontWeight: 800, letterSpacing: '-0.03em', color: VISITED_TEXT}}>{count}</span>
-                <span style={{fontSize: 16, color: ink(60)}}>of {DISTRICTS.length} districts visited</span>
+                <span style={{fontSize: 16, color: ink(80)}}>of {DISTRICTS.length} districts visited</span>
               </div>
               <div style={{height: 6, borderRadius: 999, background: ink(10), marginTop: 8, overflow: 'hidden'}} role="progressbar" aria-valuenow={count} aria-valuemin={0} aria-valuemax={DISTRICTS.length}>
                 <div style={{height: '100%', width: `${(count / DISTRICTS.length) * 100}%`, background: VISITED, borderRadius: 999, transition: 'width 0.6s ease'}} />
               </div>
-              <div style={{display: 'flex', gap: 16, marginTop: 10, fontSize: 13, color: ink(65)}}>
+              <div style={{display: 'flex', justifyContent: 'center', gap: 16, marginTop: 10, fontSize: 13, color: ink(80)}}>
                 <span style={{display: 'inline-flex', alignItems: 'center', gap: 6}}><i style={{width: 12, height: 12, borderRadius: 4, background: VISITED, display: 'inline-block'}} />Visited ({count})</span>
                 <span style={{display: 'inline-flex', alignItems: 'center', gap: 6}}><i style={{width: 12, height: 12, borderRadius: 4, background: ink(9), border: `1px solid ${ink(25)}`, display: 'inline-block'}} />Not yet ({DISTRICTS.length - count})</span>
               </div>
             </div>
 
-            <div style={{position: 'relative'}}>
+            <div ref={mapBox} style={{position: 'relative', scrollMarginTop: 16}}>
               {(place || hover) && (
                 <div
                   style={{
@@ -162,7 +166,7 @@ export function TravelPage() {
                 viewBox={`${view.x} ${view.y} ${view.w} ${h}`}
                 role="img"
                 aria-label={`Map of Bangladesh: ${count} of ${DISTRICTS.length} districts visited`}
-                style={{width: '100%', height: 'auto', display: 'block', overflow: 'hidden'}}>
+                style={{width: '100%', height: 'auto', maxHeight: 'max(320px, calc(100vh - 450px))', display: 'block', margin: '0 auto', overflow: 'hidden'}}>
                 <DistrictLayer visited={visited} activeKey={zoomed ? [...placeDistricts].sort().join('|') : ''} onPick={pickDistrict} onHover={setHover} />
                 {/* district names, once zoomed in */}
                 {zoomed && DISTRICTS.filter((d) => d.cx > view.x && d.cx < view.x + view.w && d.cy > view.y && d.cy < view.y + h).map((d) => (
@@ -203,7 +207,8 @@ export function TravelPage() {
             )}
           </div>
 
-          <div>
+          <div style={{width: '100%', maxWidth: 640, marginInline: 'auto'}}>
+            <Text color="secondary" size="sm" style={{marginBottom: 10, textAlign: 'center'}}>{place ? 'Showing the places I visited here. Pick another, or tap it again to go back to the whole map.' : 'Pick a place to zoom in and see where I went. You can also tap a green district on the map.'}</Text>
             {/* one compact line per place, so the list stays short however many places are added */}
             <ul style={{listStyle: 'none', margin: 0, padding: 0, display: 'flex', flexDirection: 'column'}}>
               {travel.map((p, idx) => {
@@ -219,53 +224,32 @@ export function TravelPage() {
                         background: on ? ink(8) : 'transparent', color: 'inherit', font: 'inherit', cursor: 'pointer', borderRadius: 8,
                         transition: 'background 0.2s ease',
                       }}>
-                      <span style={{fontSize: 12, fontWeight: 600, color: ink(68), fontVariantNumeric: 'tabular-nums'}}>{String(idx + 1).padStart(2, '0')}</span>
+                      <span style={{fontSize: 12, fontWeight: 600, color: ink(80), fontVariantNumeric: 'tabular-nums'}}>{String(idx + 1).padStart(2, '0')}</span>
                       <span style={{fontSize: 17, fontWeight: on ? 700 : 500}}>{p.name}</span>
-                      <span style={{marginLeft: 'auto', fontSize: 13, color: ink(72), whiteSpace: 'nowrap'}}>{p.spots.length} places</span>
+                      <span style={{marginLeft: 'auto', fontSize: 13, color: ink(82), whiteSpace: 'nowrap'}}>{p.spots.length} places</span>
                     </button>
+                    {on && (
+                      <ol aria-label={`Places in ${p.name}`} style={{margin: 0, padding: '2px 10px 14px 44px', listStyle: 'none', columnWidth: 170, columnGap: 20}}>
+                        {p.spots.map((s2, i) => (
+                          <li
+                            key={s2.name}
+                            onMouseEnter={() => setSpot(s2.name)}
+                            onMouseLeave={() => setSpot(null)}
+                            style={{display: 'flex', alignItems: 'center', gap: 8, padding: '4px 0', breakInside: 'avoid', fontSize: 15, opacity: !spot || spot === s2.name ? 1 : 0.45, transition: 'opacity 0.2s ease'}}>
+                            <span aria-hidden="true" style={{flex: 'none', width: 20, height: 20, borderRadius: 999, display: 'grid', placeItems: 'center', fontSize: 11, fontWeight: 700, background: 'var(--fg)', color: 'var(--bg)'}}>{i + 1}</span>
+                            <span>{s2.name}</span>
+                          </li>
+                        ))}
+                      </ol>
+                    )}
                   </li>
                 );
               })}
               <li style={{borderTop: `1px solid ${ink(14)}`}} aria-hidden="true" />
             </ul>
 
-            {/* the chosen place's spots, in a small fixed-size panel */}
-            <div aria-live="polite" style={{marginTop: 18, padding: 18, borderRadius: 14, border: `1px solid ${ink(16)}`, background: ink(4), minHeight: 150}}>
-              {place ? (
-                <VStack gap={3}>
-                  <VStack gap={0.5}>
-                    <Heading level={2} type="display-3">{place.name}</Heading>
-                    <Text color="secondary" size="sm">{place.area}</Text>
-                  </VStack>
-                  <ol style={{margin: 0, padding: 0, listStyle: 'none', columnWidth: 190, columnGap: 20}}>
-                    {place.spots.map((s2, i) => (
-                      <li
-                        key={s2.name}
-                        onMouseEnter={() => setSpot(s2.name)}
-                        onMouseLeave={() => setSpot(null)}
-                        style={{display: 'flex', alignItems: 'center', gap: 8, padding: '4px 0', breakInside: 'avoid', fontSize: 15, opacity: !spot || spot === s2.name ? 1 : 0.45, transition: 'opacity 0.2s ease'}}>
-                        <span aria-hidden="true" style={{flex: 'none', width: 20, height: 20, borderRadius: 999, display: 'grid', placeItems: 'center', fontSize: 11, fontWeight: 700, background: 'var(--fg)', color: 'var(--bg)'}}>{i + 1}</span>
-                        <span>{s2.name}</span>
-                      </li>
-                    ))}
-                  </ol>
-                </VStack>
-              ) : (
-                <VStack gap={3}>
-                  <Text color="secondary">Districts I have visited. Pick a place above, or a coloured district on the map, to zoom in.</Text>
-                  <div style={{display: 'flex', flexWrap: 'wrap', gap: 8}}>
-                    {[...visited].sort().map((n) => (
-                      <button key={n} type="button" onClick={() => pickDistrict(n)} style={{
-                        border: 0, cursor: 'pointer', padding: '5px 12px', borderRadius: 999, fontSize: 13, fontWeight: 600, font: 'inherit',
-                        background: `color-mix(in srgb, ${VISITED} 22%, transparent)`, color: 'inherit',
-                      }}>{n}</button>
-                    ))}
-                  </div>
-                </VStack>
-              )}
-            </div>
           </div>
-        </Grid>
+        </VStack>
       </div>
     </InterestShell>
   );

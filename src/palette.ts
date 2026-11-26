@@ -1,15 +1,15 @@
 /**
- * The site's page colours, in one place. Light mode is a soft sand (not white) so it is easy on the eyes; dark mode is unchanged.
+ * The site's page colours, in one place. Light mode is plain white with neutral greys; dark mode is near-black.
  * Used by: the Astryx theme (src/theme.ts), the <html> background and the --bg/--fg variables (App.tsx),
  * and the theme-change flood (src/theme-rain/engine.ts), which must match the page exactly or it would flash.
  */
 export const LIGHT = {
-  bg: '#e6dfcf', // the page
-  surface: '#efe9db', // cards, raised surfaces
-  muted: '#d8d0bd', // chips, subtle fills
-  border: '#c9bfa8',
-  ink: '#26231d', // main text (11.8:1 on the page)
-  ink2: '#4f483c', // secondary text (6.8:1 on the page)
+  bg: '#ffffff', // the page
+  surface: '#f5f5f5', // cards, raised surfaces
+  muted: '#ebebeb', // chips, subtle fills
+  border: '#d4d4d4',
+  ink: '#000000', // main text (21:1 on the page)
+  ink2: '#3d3d3d', // secondary text (11.2:1 on the page)
 };
 export const DARK = {
   bg: '#121212',

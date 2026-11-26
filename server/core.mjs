@@ -1,5 +1,7 @@
 // The portfolio's tiny API. Anyone can READ content; every change needs the admin password.
 //   GET    /api/content              edited content (public)
+//   POST   /api/visit                {id} -> {count}  counts a unique visitor (public; ids are hashed, never stored raw)
+//   GET    /api/visitors             {count}  unique visitors so far (public)
 //   POST   /api/login                {password} -> {token}
 //   GET    /api/session              checks a token
 //   PUT    /api/content/:name        {value}  (auth)   save a collection
@@ -70,6 +72,21 @@ function brake(ip) {
   if (rec.count >= 8) throw new HttpError(429, 'Too many attempts. Try again in a few minutes.');
 }
 const fail = (ip) => { const r = attempts.get(ip); if (r) r.count++; };
+
+/* ---------------- unique visitors ---------------- */
+
+/* the id is a random string the browser makes up; we keep only a salted hash of it. Per IP, only a few visits an hour,
+   so the count can't be inflated by a script inventing ids. */
+const visitsByIp = new Map();
+function visitBrake(ip) {
+  const now = Date.now();
+  if (visitsByIp.size > 5000) visitsByIp.clear();
+  const rec = visitsByIp.get(ip);
+  if (!rec || rec.reset < now) { visitsByIp.set(ip, {count: 1, reset: now + 60 * 60 * 1000}); return; }
+  if (++rec.count > 10) throw new HttpError(429, 'Too many visits from this address.');
+}
+const hashVisitor = (id) =>
+  crypto.createHash('sha256').update(`${process.env.ADMIN_SESSION_SECRET || 'portfolio'}:${id}`).digest('hex').slice(0, 32);
 
 /* ---------------- validation: only known fields, sane types ---------------- */
 
@@ -333,6 +350,15 @@ export async function handle({method, url, headers = {}, body, ip = 'unknown'}) 
   const json = (status, data) => ({status, body: data});
   try {
     if (method === 'GET' && p === '/api/content') return json(200, await getStore().getAll());
+
+    if (method === 'GET' && p === '/api/visitors') return json(200, {count: await getStore().countVisitors()});
+
+    if (method === 'POST' && p === '/api/visit') {
+      const id = body && typeof body.id === 'string' ? body.id : '';
+      if (!/^[A-Za-z0-9-]{16,64}$/.test(id)) throw new HttpError(400, 'Bad visitor id.');
+      visitBrake(ip);
+      return json(200, {count: await getStore().addVisitor(hashVisitor(id))});
+    }
 
     if (method === 'POST' && p === '/api/login') {
       brake(ip);

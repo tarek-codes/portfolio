@@ -2,7 +2,7 @@ import {defineTheme} from '@astryxdesign/core/theme';
 import {neutralTheme} from '@astryxdesign/theme-neutral';
 import {DARK, LIGHT} from './palette';
 
-/** The Astryx neutral theme with a softer light mode: warm sand instead of white, and warm near-black ink. */
+/** The Astryx neutral theme with white light mode and near-black ink. */
 export const siteTheme = defineTheme({
   name: 'portfolio',
   extends: neutralTheme,

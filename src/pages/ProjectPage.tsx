@@ -1,21 +1,24 @@
-import {Link as RouterLink, Navigate, useParams} from 'react-router-dom';
+import {Link as RouterLink, Navigate, useNavigate, useParams} from 'react-router-dom';
 import {VStack} from '@astryxdesign/core/VStack';
 import {HStack} from '@astryxdesign/core/HStack';
 import {Text} from '@astryxdesign/core/Text';
 import {Heading} from '@astryxdesign/core/Heading';
 import {Button} from '@astryxdesign/core/Button';
+import {Divider} from '@astryxdesign/core/Divider';
 import {Link} from '@astryxdesign/core/Link';
 import {Token} from '@astryxdesign/core/Token';
 import {Carousel} from '@astryxdesign/core/Carousel';
 import {projects} from '../content';
-import {InformationCircleIcon, SparklesIcon, ComputerDesktopIcon, ArrowRightIcon} from '@heroicons/react/24/outline';
+import {InformationCircleIcon, SparklesIcon, ComputerDesktopIcon, ArrowRightIcon, ArrowLeftIcon} from '@heroicons/react/24/outline';
 import {Section, ProjectHero, BulletList} from '../ui';
 
 export default function ProjectPage() {
   const {slug} = useParams();
+  const navigate = useNavigate();
   const i = projects.findIndex((p) => p.slug === slug);
   if (i < 0) return <Navigate to="/" replace />;
   const p = projects[i];
+  const prev = projects[(i - 1 + projects.length) % projects.length];
   const next = projects[(i + 1) % projects.length];
 
   return (
@@ -77,14 +80,24 @@ export default function ProjectPage() {
         </Section>
       )}
 
-      <Section id="next" title="Next Project" icon={ArrowRightIcon}>
-        <RouterLink to={`/projects/${next.slug}`} style={{color: 'inherit', textDecoration: 'none'}}>
-          <VStack gap={0.5}>
-            <Heading level={3} weight="semibold">{next.name} →</Heading>
-            <Text color="secondary">{next.summary}</Text>
-          </VStack>
-        </RouterLink>
-      </Section>
+      <VStack gap={6} as="section" id="next" style={{marginTop: 56}}>
+        <div data-reveal><Divider /></div>
+        <VStack gap={4}>
+          <HStack justify="between" align="start" gap={4} wrap="wrap">
+            <VStack gap={1} align="start">
+              <Button label="Previous Project" variant="secondary" icon={<ArrowLeftIcon />} onClick={() => navigate(`/projects/${prev.slug}`)} />
+              <Text color="secondary">{prev.name}</Text>
+            </VStack>
+            <VStack gap={1} align="end">
+              <Button label="Next Project" variant="secondary" endContent={<ArrowRightIcon />} onClick={() => navigate(`/projects/${next.slug}`)} />
+              <Text color="secondary">{next.name}</Text>
+            </VStack>
+          </HStack>
+          <HStack justify="center">
+            <Button label="Main Page" variant="primary" onClick={() => navigate('/')} />
+          </HStack>
+        </VStack>
+      </VStack>
     </>
   );
 }

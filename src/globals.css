@@ -1,8 +1,8 @@
 @import '@astryxdesign/core/reset.css';
 @import '@astryxdesign/core/astryx.css';
 
-/* Page colours. Light mode is a soft sand, not white. The real values live in src/palette.ts. */
-:root { --bg: light-dark(#e6dfcf, #121212); --fg: light-dark(#26231d, #ffffff); } /* fallback until App.tsx sets them from src/palette.ts */
+/* Page colours. Light mode is white. The real values live in src/palette.ts. */
+:root { --bg: light-dark(#ffffff, #121212); --fg: light-dark(#000000, #ffffff); } /* fallback until App.tsx sets them from src/palette.ts */
 html { scroll-behavior: smooth; background: var(--bg); }
 a { text-underline-offset: 3px; }
 

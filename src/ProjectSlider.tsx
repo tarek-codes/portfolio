@@ -1,4 +1,4 @@
-import {useEffect, useRef} from 'react';
+import {useEffect, useRef, useState} from 'react';
 import {Link as RouterLink} from 'react-router-dom';
 import gsap from 'gsap';
 import {Carousel} from '@astryxdesign/core/Carousel';
@@ -13,6 +13,7 @@ import {ProjectHero} from './ui';
 
 const CARD_W = 360;
 const GAP = 16; // Carousel gap={4}
+const EDGE = 40; // the faded strip at each end; cards rest just inside it
 const SPEED = 36; // px per second, right to left
 
 function ProjectCard({p}: {p: Project}) {
@@ -44,9 +45,17 @@ export default function ProjectSlider({projects}: {projects: Project[]}) {
   const paused = useRef(false);
   const pos = useRef(0);
   const tween = useRef<gsap.core.Tween | null>(null);
+  const [current, setCurrent] = useState(0); // the project at the left edge, for the numbers underneath
+  const shown = useRef(0);
 
   const scroller = () => root.current?.querySelector<HTMLElement>('.astryx-carousel-scroller') ?? null;
-  const half = (el: HTMLElement) => el.scrollWidth / 2;
+  const half = (el: HTMLElement) => cardStep(el) * projects.length; // one full set of cards (the end padding must not count)
+
+  const cardStep = (el: HTMLElement) => ((el.firstElementChild as HTMLElement | null)?.offsetWidth ?? CARD_W) + GAP;
+  const syncCurrent = (el: HTMLElement) => {
+    const i = Math.round(pos.current / cardStep(el)) % projects.length;
+    if (i !== shown.current) { shown.current = i; setCurrent(i); }
+  };
 
   const wrap = (el: HTMLElement) => {
     const h = half(el);
@@ -59,6 +68,7 @@ export default function ProjectSlider({projects}: {projects: Project[]}) {
     if (!el) return;
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     el.style.scrollBehavior = 'auto'; // we animate scrollLeft ourselves
+    el.style.paddingInline = `${EDGE}px`; // so a card at rest sits clear of the fade
     pos.current = el.scrollLeft;
 
     // Keep in sync when the user drags/swipes the scroller themselves.
@@ -68,6 +78,7 @@ export default function ProjectSlider({projects}: {projects: Project[]}) {
         wrap(el);
         el.scrollLeft = pos.current;
       }
+      syncCurrent(el);
     };
     el.addEventListener('scroll', onScroll, {passive: true});
 
@@ -76,6 +87,7 @@ export default function ProjectSlider({projects}: {projects: Project[]}) {
       pos.current += (SPEED * deltaMs) / 1000;
       wrap(el);
       el.scrollLeft = pos.current;
+      syncCurrent(el);
     };
     gsap.ticker.add(tick);
     return () => {
@@ -100,6 +112,18 @@ export default function ProjectSlider({projects}: {projects: Project[]}) {
     });
   };
 
+  /** Slide to project number i (0-based). */
+  const goTo = (i: number) => {
+    const el = scroller();
+    if (!el) return;
+    tween.current?.kill();
+    const state = {v: el.scrollLeft};
+    tween.current = gsap.to(state, {
+      v: i * cardStep(el), duration: 0.8, ease: 'power3.inOut',
+      onUpdate: () => { pos.current = state.v; el.scrollLeft = state.v; },
+    });
+  };
+
   const arrow = (side: 'left' | 'right') => (
     <div style={{flex: 'none'}}>
       <Button
@@ -113,6 +137,7 @@ export default function ProjectSlider({projects}: {projects: Project[]}) {
   );
 
   return (
+    <div>
     <div
       style={{display: 'flex', alignItems: 'center', gap: 12}}
       onPointerEnter={() => { paused.current = true; }}
@@ -124,7 +149,12 @@ export default function ProjectSlider({projects}: {projects: Project[]}) {
         role="group"
         aria-roledescription="carousel"
         aria-label="Projects. Use the left and right arrow keys to browse."
-        style={{outlineOffset: 4, flex: 1, minWidth: 0}}
+        style={{
+          outlineOffset: 4, flex: 1, minWidth: 0,
+          // cards fade out at both ends instead of being cut off
+          WebkitMaskImage: `linear-gradient(to right, transparent, #000 ${EDGE}px, #000 calc(100% - ${EDGE}px), transparent)`,
+          maskImage: `linear-gradient(to right, transparent, #000 ${EDGE}px, #000 calc(100% - ${EDGE}px), transparent)`,
+        }}
         onFocus={() => { paused.current = true; }}
         onBlur={() => { paused.current = false; }}
         onKeyDown={(e) => {
@@ -141,6 +171,28 @@ export default function ProjectSlider({projects}: {projects: Project[]}) {
         </Carousel>
       </div>
       {arrow('right')}
+    </div>
+      <nav aria-label="Project numbers" style={{display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 6, marginTop: 16}}>
+        {projects.map((p, i) => {
+          const on = i === current;
+          return (
+            <button
+              key={p.slug}
+              type="button"
+              onClick={() => goTo(i)}
+              aria-label={`Project ${i + 1}: ${p.name}`}
+              aria-current={on ? 'true' : undefined}
+              title={p.name}
+              style={{
+                width: 34, height: 28, borderRadius: 999, cursor: 'pointer', font: 'inherit', fontSize: 12, fontWeight: 600,
+                fontVariantNumeric: 'tabular-nums', border: '1px solid color-mix(in srgb, var(--fg) 25%, transparent)',
+                background: on ? 'var(--fg)' : 'transparent', color: on ? 'var(--bg)' : 'var(--fg)', transition: 'background 0.2s ease, color 0.2s ease',
+              }}>
+              {String(i + 1).padStart(2, '0')}
+            </button>
+          );
+        })}
+      </nav>
     </div>
   );
 }

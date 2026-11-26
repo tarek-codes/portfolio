@@ -2,9 +2,8 @@
 export const profile = {
   name: 'Tarek Alam Bhuiyan',
   role: 'Software Engineer · AI-Native Full-Stack Developer',
-  location: 'Dhaka, Bangladesh',
   summary:
-    'I build full-stack web applications, backend services and AI systems: REST APIs, authentication, real-time features, RAG pipelines and ML models. BSc in Computer Science & Engineering from BRAC University, with a solid footing in data structures, algorithms and system design.',
+    'Based in Dhaka, Bangladesh, I build full-stack web applications, backend services and AI systems: REST APIs, authentication, real-time features, RAG pipelines and ML models. BSc in Computer Science & Engineering from BRAC University, with a solid footing in data structures, algorithms and system design.',
   email: 'tarekalambhuiyan@gmail.com',
   links: [
     {label: 'GitHub', href: 'https://github.com/tarek-codes'},
@@ -74,7 +73,7 @@ export const experience: (Org & {kind: ExperienceKind; role: string; org: string
     role: 'Researcher',
     kind: 'research',
     org: 'ELITE Research Lab LLC',
-    logo: '/logos/elite.png', logoBg: '#efe9db',
+    logo: '/logos/elite.png', logoBg: '#f5f5f5',
     when: 'Aug 2026 – Present',
     where: 'Remote · New York, USA',
     points: ['Research in Deep Learning, Medical Imaging and NLP.'],
@@ -98,7 +97,7 @@ export const education: (Org & {degree: string; school: string; when: string; wh
   {
     degree: 'BSc in Computer Science & Engineering',
     school: 'BRAC University',
-    logo: '/logos/bracu.svg', logoBg: '#efe9db',
+    logo: '/logos/bracu.svg', logoBg: '#f5f5f5',
     when: 'Jan 2022 – Jan 2026',
     where: 'Dhaka',
     note: 'Thesis: XEB-FuseNet, a multimodal deep-learning framework for thoracic disease diagnosis.',
@@ -106,7 +105,7 @@ export const education: (Org & {degree: string; school: string; when: string; wh
   {
     degree: 'Higher Secondary Certificate (HSC), Science',
     school: 'Govt. Mohammadpur Model School and College',
-    logo: '/logos/mmsc.png', logoBg: '#efe9db',
+    logo: '/logos/mmsc.png', logoBg: '#f5f5f5',
     when: 'Jan 2019 – Dec 2020',
     where: 'Dhaka',
     note: '',
@@ -114,7 +113,7 @@ export const education: (Org & {degree: string; school: string; when: string; wh
   {
     degree: 'Secondary School Certificate (SSC), Science',
     school: 'Dhanmondi Govt. Boys\u2019 High School',
-    logo: '/logos/dgbhs.png', logoBg: '#efe9db',
+    logo: '/logos/dgbhs.png', logoBg: '#f5f5f5',
     when: 'Jan 2017 – Dec 2018',
     where: 'Dhaka',
     note: '',
@@ -337,16 +336,19 @@ export const skills: {group: string; items: string[]}[] = [
 export const achievements = [
   {
     title: 'Lofistack Hackathon 2026',
+    group: 'Hackathons',
     note: '1st Runner-Up · Team VibeStack (team lead) · 180+ entries, 72 finalists',
     href: 'https://my-certificates.com/certificates/6aa02325df30fc41b2cd7735',
-    image: '/shots/lofistack-podium.jpg',
-    imageAlt: 'Final standings at the Lofistack Hackathon 2026 prizegiving: VibeStack as runner-up beside champion Wizards and runner-up BinaryBros',
+    image: '/lofi.jpg',
+    imageAlt: 'Lofistack Hackathon 2026 1st Runner-Up poster: Team VibeStack, Faisal Hossain and Tarek Alam Bhuiyan',
     imageHref: 'https://live.hackathon.lofistack.com/prizegiving',
   },
-  {title: 'BUCC Intrahacktive Hackathon', note: 'Database Wizard · BRAC University Computer Club', href: 'https://drive.google.com/file/d/1QnVPVa141Mral5nBFhLEMUsCOVzNdj5o/view'},
-  {title: 'MIST Neofetch Hackathon', note: 'Programming Hero · MIST Innovation Club', href: 'https://drive.google.com/file/d/15Gw8_R1a3b7WHYZpvAcI4iicteZhYD3o/view'},
-  {title: 'AI Fundamentals', note: 'DataCamp', href: 'https://www.datacamp.com/skill-verification/AIF0025451703728'},
-  {title: 'Intermediate SQL', note: 'DataCamp', href: 'https://www.datacamp.com/completed/statement-of-accomplishment/course/114e366d7194002d5c73c64232aacbdb96b95786'},
+  {title: 'BUCC Intrahacktive Hackathon', group: 'Hackathons', note: 'Database Wizard · BRAC University Computer Club', href: 'https://drive.google.com/file/d/1QnVPVa141Mral5nBFhLEMUsCOVzNdj5o/view', image: '/certs/bucc-database-wizard.png', imageAlt: 'Certificate: Database Wizard award, BUCC Intrahacktive Hackathon'},
+  {title: 'MIST Neofetch Hackathon', group: 'Hackathons', note: 'Programming Hero · MIST Innovation Club', href: 'https://drive.google.com/file/d/15Gw8_R1a3b7WHYZpvAcI4iicteZhYD3o/view', image: '/certs/mist-neofetch.png', imageAlt: 'Certificate: MIST Neofetch Hackathon, Programming Hero'},
+  {title: 'SICIP Training on MLDL', group: 'Training', note: 'Certificate Course on Machine Learning and Deep Learning · Ministry of Finance & Asian Development Bank', href: 'https://drive.google.com/file/d/1m_ayJ4wHRfG4NN6X31K879U5fqZzXmcj/view', image: '/certs/sicip-mldl.png', imageAlt: 'SICIP Certificate Course on Machine Learning and Deep Learning, with BRAC University, Government of Bangladesh and ADB logos'},
+  {title: 'DofE: Duke of Edinburgh’s International Award', group: 'Certifications', note: 'Bronze · 2022 · The Duke of Edinburgh’s Award Foundation', href: 'https://drive.google.com/file/d/1Htl9szl1CPnxYtIJ9OrH4lpe7bM5tw-Q/view', image: '/certs/dofe-bronze.png', imageAlt: 'The Duke of Edinburgh’s Award DofE emblem on a bronze plaque'},
+  {title: 'AI Fundamentals', group: 'Certifications', note: 'DataCamp', href: 'https://www.datacamp.com/skill-verification/AIF0025451703728', image: '/certs/datacamp-ai-fundamentals.png', imageAlt: 'DataCamp certificate: AI Fundamentals'},
+  {title: 'Intermediate SQL', group: 'Certifications', note: 'DataCamp', href: 'https://www.datacamp.com/completed/statement-of-accomplishment/course/114e366d7194002d5c73c64232aacbdb96b95786', image: '/certs/datacamp-intermediate-sql.png', imageAlt: 'DataCamp certificate: Intermediate SQL'},
 ];
 
 

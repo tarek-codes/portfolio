@@ -54,7 +54,7 @@ export function toneStyle(id: string) {
 export function Section({id, title, icon, children}: {id: string; title: string; icon?: ComponentType<SVGProps<SVGSVGElement>>; children: ReactNode}) {
   return (
     // every section after About Me gets extra breathing room above it
-    <VStack gap={6} as="section" id={id} style={{marginTop: id === 'about' ? 0 : 56}}>
+    <VStack gap={6} as="section" id={id} style={{marginTop: id === 'about' ? 0 : 72}}>
       <div data-reveal><Divider /></div>
       <div data-reveal>
         <div
@@ -102,7 +102,7 @@ export function ProjectHero({project}: {project: Project}) {
 
 export function BulletList({items}: {items: string[]}) {
   return (
-    <ul style={{margin: 0, paddingInlineStart: 20, listStyle: 'disc', display: 'flex', flexDirection: 'column', gap: 6}}>
+    <ul style={{margin: 0, paddingInlineStart: 20, listStyle: 'disc', display: 'flex', flexDirection: 'column', gap: 9}}>
       {items.map((t) => (
         <li key={t}><Text textWrap="pretty">{t}</Text></li>
       ))}

@@ -63,6 +63,8 @@ function Shell() {
                       <Button label="Experience" variant="ghost" href="#experience" />
                       <Button label="Education" variant="ghost" href="#education" />
                       <Button label="Projects" variant="ghost" href="#projects" />
+                      <Button label="Skills" variant="ghost" href="#skills" />
+                      <Button label="Achievements" variant="ghost" href="#achievements" />
                     </>
                   ) : (
                     <Button label="Home" variant="ghost" onClick={() => navigate('/')} />
