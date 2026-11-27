@@ -63,3 +63,10 @@ a { text-underline-offset: 3px; }
 .nav-sec a:hover, .nav-sec a:focus-visible, .nav-sec button:hover, .nav-sec button:focus-visible {
   background: var(--pill-bg) !important; color: var(--pill-fg) !important;
 }
+
+/* My Setup: the panel fades in when you switch tabs */
+@media (prefers-reduced-motion: no-preference) { .tab-panel { animation: tab-in 0.25s ease; } }
+@keyframes tab-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+/* the project page is wider than the home page, so its hero is a little flatter to keep it from towering over the text */
+.proj-hero > div { aspect-ratio: 16 / 9 !important; }

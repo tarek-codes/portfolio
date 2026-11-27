@@ -34,6 +34,7 @@ function Shell() {
   const {pathname} = useLocation();
   useEffect(() => {
     const c = mode === 'dark' ? DARK : LIGHT;
+    document.documentElement.dataset.theme = mode;
     document.documentElement.style.backgroundColor = c.bg;
     document.documentElement.style.setProperty('--bg', c.bg);
     document.documentElement.style.setProperty('--fg', c.ink);
@@ -61,7 +62,7 @@ function Shell() {
       <Layout
         content={
           <LayoutContent role="main" padding={6} style={{paddingBlock: 'var(--page-pad)'}}>
-            <VStack gap={10} style={{...page, gap: 'var(--block-gap)'}}>
+            <VStack gap={10} style={{...page, maxWidth: isHome ? page.maxWidth : 1120, gap: 'var(--block-gap)'}}>
               {/* the top bar (section links + theme switch) is for the home page only */}
               {isHome && (
                 <div style={{display: 'grid', gridTemplateColumns: '1fr auto 1fr', alignItems: 'center', gap: 8}}>

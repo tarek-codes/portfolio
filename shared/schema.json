@@ -743,6 +743,16 @@
      "type": "text"
     },
     {
+     "key": "group",
+     "label": "Section",
+     "type": "select",
+     "options": [
+      "PC Components",
+      "Phones",
+      "Laptop"
+     ]
+    },
+    {
      "key": "image",
      "label": "Photo of the part (path or URL)",
      "type": "text"

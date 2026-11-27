@@ -72,3 +72,5 @@ export const DISTRICT_NAMES = DISTRICTS.map((d) => d.name);
 const X0 = 87.8906, Y1 = 26.7544, K = 0.91575, S = 110.0;
 /** Project a longitude/latitude to the map's coordinates. */
 export const projectBD = (lon: number, lat: number): [number, number] => [(lon - X0) * K * S, (Y1 - lat) * S];
+/** The way back: the map's coordinates to [longitude, latitude]. */
+export const unprojectBD = (x: number, y: number): [number, number] => [x / (K * S) + X0, Y1 - y / S];

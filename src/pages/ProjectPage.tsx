@@ -40,7 +40,7 @@ export default function ProjectPage() {
         </div>
       </VStack>
 
-      <div data-hero><ProjectHero project={p} /></div>
+      <div data-hero className="proj-hero"><ProjectHero project={p} /></div>
 
       <Section id="overview" title="Overview" icon={InformationCircleIcon}>
         <VStack gap={4}>

@@ -77,7 +77,7 @@ Every project has its own page at `/projects/<slug>` with an overview, highlight
 
 | Page | What is in it |
 | --- | --- |
-| **Travelling** `/interests/travelling` | A zoomable map of Bangladesh's 64 districts with the visited ones coloured in, a progress counter, and a list of places. Pick a place to zoom in and see its numbered spots. **Tap any spot (in the list or on the map) to open a popup** with a hero photo, an interesting fact and a photo credit. |
+| **Travelling** `/interests/travelling` | **Bangladesh only**, cut out of a clean grey basemap (light or dark, with no place names of its own): the 64 district outlines are drawn on top with the visited ones in green and every district named (names grow as you zoom, and crowded ones appear as you zoom in), plus a progress counter and a list of places. Pick a place and the map flies to it and drops numbered pins on its spots, with street-level detail up to full zoom. The edges fade into the page, and dark mode gets a dark map. **Tap any spot (in the list or on the map) to open a popup** with a hero photo, an interesting fact and a photo credit. |
 | **Music** `/interests/music` | Playlists. |
 | **Watching** `/interests/watching` | A poster grid of movies and series with ratings. |
 | **Video Games** `/interests/gaming` | Games with platform and notes. |
@@ -90,7 +90,7 @@ Every project has its own page at `/projects/<slug>` with an overview, highlight
 
 ### My Setup
 
-`/setup` lists the PC I build and play on, part by part: case, CPU, GPU, motherboard, RAM, storage, cooler and OS. Each part is a card with an icon, its exact model and, where available, a product photo.
+`/setup` shows the gear I use, with **tabs** to switch between the **PC** (case, CPU, GPU, motherboard, RAM, storage, cooler and OS), the **laptop** and the **phones** in the same place. Each part is a card with an icon, its exact model and a product photo.
 
 <p align="center">
   <img src="docs/screenshots/setup.jpg" alt="The My Setup page" width="70%">
@@ -140,11 +140,12 @@ Everything has defaults in `src/content.ts`. Edits are stored on the server and 
 | Build | Vite 8 |
 | UI | Astryx components and `@astryxdesign/theme-neutral` |
 | Motion | GSAP (ScrollTrigger) and Lenis |
+| Maps | [Leaflet](https://leafletjs.com/) with Esri's grey canvas basemap |
 | Icons | Heroicons and Simple Icons |
 | Server | A small dependency-free Node API (`server/`) that also runs as a Vercel function |
 | Storage | A JSON file, or Upstash Redis / Vercel KV for hosts without a disk |
 
-**Performance.** The interest pages (with the 190 KB Bangladesh map) and the admin are split into chunks that load only when opened, so the main script is about 712 KB (242 KB gzipped) instead of 1.17 MB. All spot and certificate images are WebP at display size.
+**Performance.** The interest pages (with the Bangladesh map and Leaflet) and the admin are split into chunks that load only when opened, so the main script is about 712 KB (242 KB gzipped) instead of 1.17 MB. All spot and certificate images are WebP at display size.
 
 **Privacy and security.**
 
@@ -231,7 +232,7 @@ docs/screenshots/            the pictures in this README
 
 - UI components and theme: [Astryx](https://github.com/meta/astryx) (Meta). Brand icons from [Simple Icons](https://simpleicons.org/), other icons from Heroicons.
 - The theme-change animation is adapted from the Theme Switch component by [Pin UI](https://www.pinui.xyz/components/theme-switch) (see the header of `src/theme-rain/engine.ts`).
-- The district map was inspired by [Unseen Bangladesh](https://unseenbd.com/). Its outlines are simplified from administrative boundary data used in the AVN project; check the data provider's licence (GADM is free for non-commercial use) before reusing them.
+- The Travelling map uses Esri's World Light/Dark Gray Canvas basemap (tiles © Esri, HERE, Garmin, © OpenStreetMap contributors) through [Leaflet](https://leafletjs.com/). The district map was inspired by [Unseen Bangladesh](https://unseenbd.com/). Its outlines are simplified from administrative boundary data used in the AVN project; check the data provider's licence (GADM is free for non-commercial use) before reusing them.
 - Photos in the Travelling popups come from [Wikimedia Commons](https://commons.wikimedia.org/) under free licences (CC BY, CC BY-SA, CC0). Each popup shows the author and licence and links to the file page. The facts are drawn from Wikipedia.
 - Movie and series data comes from TVmaze, Wikipedia, TMDB (optional) and Letterboxd's public feed.
 - Company, school, certificate and product logos and photos (including the My Setup product images) belong to their owners and are shown to describe my work, education and equipment.

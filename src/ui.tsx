@@ -42,7 +42,7 @@ export const TONES: Record<string, [string, string, string, string]> = {
   movie: ['#fecaca', '#7f1d1d', '#7f1d1d', '#fecaca'],
   games: ['#d9f99d', '#365314', '#365314', '#d9f99d'],
   learning: ['#f5d0fe', '#701a75', '#701a75', '#f5d0fe'],
-  components: ['#e9d5ff', '#581c87', '#581c87', '#e9d5ff'],
+  devices: ['#e9d5ff', '#581c87', '#581c87', '#e9d5ff'],
 };
 export const FALLBACK: [string, string, string, string] = ['#e5e7eb', '#111827', '#374151', '#f3f4f6'];
 

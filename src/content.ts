@@ -522,17 +522,20 @@ export type Game = {title: string; platform?: string; note?: string; cover?: str
 /** Video games I play: add {title, platform, note}. */
 export const games: Game[] = [];
 
-export type SetupPart = {part: string; name: string; detail?: string; image?: string; imageAlt?: string};
+export type SetupPart = {part: string; name: string; detail?: string; group?: string; image?: string; imageAlt?: string};
 /** My PC, part by part, shown on the My Setup page (/setup). Editable in /admin. */
 export const setup: SetupPart[] = [
-  {part: 'Case', name: 'NZXT Flow', detail: 'White', image: '/setup/case.webp', imageAlt: 'NZXT H5 Flow case in white'},
-  {part: 'CPU', name: 'AMD Ryzen 5 5600G', detail: '6 cores / 12 threads · Radeon Graphics'},
-  {part: 'GPU', name: 'NVIDIA GeForce RTX 3060', detail: '12GB GDDR6 VRAM · EVGA', image: '/setup/gpu.webp', imageAlt: 'NVIDIA artwork of a GeForce RTX 3060 card inside a PC (reference image, not my exact EVGA card)'},
-  {part: 'Motherboard', name: 'MSI B550M PRO-VDH WIFI', detail: 'MS-7C95 · AM4 · Micro-ATX', image: '/setup/motherboard.webp', imageAlt: 'MSI B550M PRO-VDH WIFI motherboard and its box'},
-  {part: 'RAM', name: '32GB DDR4-3200', detail: '16GB G.Skill Ripjaws V + 2 × 8GB Corsair Vengeance RGB Pro', image: '/setup/ram.webp', imageAlt: 'G.Skill Ripjaws V and Corsair Vengeance RGB Pro memory'},
-  {part: 'Storage', name: 'Samsung 970 EVO Plus', detail: '500GB NVMe M.2 SSD', image: '/setup/storage.webp', imageAlt: 'Samsung 970 EVO Plus 500GB NVMe M.2 SSD'},
-  {part: 'CPU Cooler', name: 'DeepCool White Tower Cooler', image: '/setup/cooler.webp', imageAlt: 'DeepCool white single-tower CPU cooler'},
-  {part: 'Operating System', name: 'Windows 11 Pro', image: '/setup/os.png', imageAlt: 'Windows 11 logo'},
+  {part: 'Case', group: 'PC Components', name: 'NZXT Flow', detail: 'White', image: '/setup/case.webp', imageAlt: 'NZXT H5 Flow case in white'},
+  {part: 'CPU', group: 'PC Components', name: 'AMD Ryzen 5 5600G', detail: '6 cores / 12 threads · Radeon Graphics', image: '/setup/cpu.webp', imageAlt: 'AMD Ryzen 5 5600G processor'},
+  {part: 'GPU', group: 'PC Components', name: 'NVIDIA GeForce RTX 3060', detail: '12GB GDDR6 VRAM · EVGA', image: '/setup/gpu.webp', imageAlt: 'EVGA GeForce RTX 3060 XC graphics card with two fans'},
+  {part: 'Motherboard', group: 'PC Components', name: 'MSI B550M PRO-VDH WIFI', detail: 'MS-7C95 · AM4 · Micro-ATX', image: '/setup/motherboard.webp', imageAlt: 'MSI B550M PRO-VDH WIFI motherboard and its box'},
+  {part: 'RAM', group: 'PC Components', name: '32GB DDR4-3200', detail: '16GB G.Skill Ripjaws V + 2 × 8GB Corsair Vengeance RGB Pro', image: '/setup/ram.webp', imageAlt: 'G.Skill Ripjaws V and Corsair Vengeance RGB Pro memory'},
+  {part: 'Storage', group: 'PC Components', name: 'Samsung 970 EVO Plus', detail: '500GB NVMe M.2 SSD', image: '/setup/storage.webp', imageAlt: 'Samsung 970 EVO Plus 500GB NVMe M.2 SSD'},
+  {part: 'CPU Cooler', group: 'PC Components', name: 'DeepCool White Tower Cooler', image: '/setup/cooler.webp', imageAlt: 'DeepCool white single-tower CPU cooler'},
+  {part: 'Operating System', group: 'PC Components', name: 'Windows 11 Pro', image: '/setup/os.png', imageAlt: 'Windows 11 logo'},
+  {part: 'Phone', group: 'Phones', name: 'iPhone 16 Pro', detail: 'US model · 128GB · Black', image: '/setup/iphone.webp', imageAlt: 'iPhone 16 Pro in black titanium, back and side'},
+  {part: 'Secondary Phone', group: 'Phones', name: 'Redmi K20 Pro', detail: 'Global variant · 6GB RAM · 64GB · Blue', image: '/setup/redmi.webp', imageAlt: 'Redmi K20 Pro in blue, front'},
+  {part: 'Laptop', group: 'Laptop', name: 'ASUS TUF F15', detail: 'Intel CPU · 16GB RAM · NVIDIA GeForce RTX 3050 4GB', image: '/setup/laptop.webp', imageAlt: 'ASUS TUF Gaming F15 laptop'},
 ];
 
 export type Learning = {title: string; note?: string; tags: string[]};

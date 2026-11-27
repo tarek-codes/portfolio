@@ -1,5 +1,4 @@
-import {memo, useEffect, useMemo, useRef, useState} from 'react';
-import gsap from 'gsap';
+import {useMemo, useRef, useState} from 'react';
 import type {ReactNode} from 'react';
 import {VStack} from '@astryxdesign/core/VStack';
 import {HStack} from '@astryxdesign/core/HStack';
@@ -12,7 +11,8 @@ import {Button} from '@astryxdesign/core/Button';
 import {Token} from '@astryxdesign/core/Token';
 import {Dialog, DialogHeader} from '@astryxdesign/core/Dialog';
 import {travel, playlists, watched, games, learning, type Place, type Spot} from '../content';
-import {BD_H, BD_W, DISTRICTS, projectBD} from '../bd-map';
+import {DISTRICTS} from '../bd-map';
+import TravelMap from '../TravelMap';
 import {Section} from '../ui';
 import {InterestShell} from './shell';
 import {MusicalNoteIcon, FilmIcon, TvIcon, PuzzlePieceIcon, LightBulbIcon} from '@heroicons/react/24/outline';
@@ -20,60 +20,15 @@ import {MusicalNoteIcon, FilmIcon, TvIcon, PuzzlePieceIcon, LightBulbIcon} from 
 /* ---------------- Travelling ---------------- */
 
 const ink = (pct: number) => `color-mix(in srgb, var(--fg) ${pct}%, transparent)`;
-const VISITED = 'light-dark(#10b981, #34d399)'; // map fill
+const VISITED = 'light-dark(#10b981, #34d399)'; // legend and progress bar
 const VISITED_TEXT = 'light-dark(#047857, #34d399)'; // the same green, deep enough to read as text on the white page
-type View = {x: number; y: number; w: number};
-const FULL: View = {x: 0, y: 0, w: BD_W};
-
-/** The view that frames a place and its spots, in the map's own aspect ratio. */
-function frame(p: Place): View {
-  const pts = [projectBD(p.lon, p.lat), ...p.spots.map((s) => projectBD(s.lon, s.lat))];
-  const xs = pts.map((q) => q[0]), ys = pts.map((q) => q[1]);
-  const cx = (Math.min(...xs) + Math.max(...xs)) / 2, cy = (Math.min(...ys) + Math.max(...ys)) / 2;
-  const w = Math.max((Math.max(...xs) - Math.min(...xs)) * 1.7, (Math.max(...ys) - Math.min(...ys)) * 1.7 * (BD_W / BD_H), 34);
-  const h = w * (BD_H / BD_W);
-  return {x: cx - w / 2, y: cy - h / 2, w};
-}
-
-/** The 64 district shapes. Memoised: they only change when the visited set or the highlighted district does. */
-const DistrictLayer = memo(function DistrictLayer({visited, activeKey, onPick, onHover}: {
-  visited: Set<string>; activeKey: string; onPick: (name: string) => void; onHover: (name: string | null) => void;
-}) {
-  const active = activeKey ? new Set(activeKey.split('|')) : null;
-  return (
-    <g>
-      {DISTRICTS.map((d) => {
-        const seen = visited.has(d.name);
-        return (
-          <path
-            key={d.name}
-            d={d.path}
-            fillRule="evenodd"
-            style={{
-              fill: seen ? VISITED : ink(9), stroke: 'var(--bg)', strokeWidth: 1, strokeLinejoin: 'round',
-              cursor: seen ? 'pointer' : 'default', transition: 'fill 0.3s ease',
-              opacity: active && !active.has(d.name) && seen ? 0.5 : 1,
-            }}
-            vectorEffect="non-scaling-stroke"
-            onMouseEnter={() => onHover(d.name)}
-            onMouseLeave={() => onHover(null)}
-            onClick={() => seen && onPick(d.name)}
-          />
-        );
-      })}
-    </g>
-  );
-});
 
 export function TravelPage() {
   const [focus, setFocus] = useState<string | null>(null); // the place the map is zoomed on
   const [spot, setSpot] = useState<string | null>(null); // a spot being pointed at
   const [hover, setHover] = useState<string | null>(null); // a district being pointed at
-  const [view, setView] = useState<View>(FULL);
   const [factSpot, setFactSpot] = useState<{place: Place; spot: Spot} | null>(null); // the spot whose popup (fact + hero image) is open
   const openSpot = (p: Place, sp: Spot) => { if (sp.fact) setFactSpot({place: p, spot: sp}); };
-  const cur = useRef<View>({...FULL});
-  const tween = useRef<gsap.core.Tween | null>(null);
   const mapBox = useRef<HTMLDivElement | null>(null);
 
   // every district that has a place or a spot in it
@@ -89,31 +44,15 @@ export function TravelPage() {
     // the list sits below the map: if the map has scrolled out of view, bring it back so the zoom is seen
     const box = mapBox.current?.getBoundingClientRect();
     if (id && box && (box.top < 0 || box.bottom > window.innerHeight)) mapBox.current?.scrollIntoView({behavior: 'smooth', block: 'center'});
-    const place = travel.find((p) => p.id === id);
-    const to = place ? frame(place) : FULL;
-    tween.current?.kill();
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      cur.current = {...to};
-      setView({...to});
-      return;
-    }
-    tween.current = gsap.to(cur.current, {
-      x: to.x, y: to.y, w: to.w, duration: 0.9, ease: 'power3.inOut',
-      onUpdate: () => setView({...cur.current}),
-    });
   };
-  useEffect(() => () => { tween.current?.kill(); }, []);
 
   const pickDistrict = (name: string) => {
     const p = travel.find((x) => x.district === name) ?? travel.find((x) => x.spots.some((s) => s.district === name));
     if (p) zoomTo(p.id);
   };
 
-  const k = view.w / BD_W; // keeps pins and text the same size on screen at any zoom
-  const h = view.w * (BD_H / BD_W);
   const zoomed = focus !== null;
   const place = travel.find((p) => p.id === focus);
-  const placeDistricts = new Set(place ? [place.district, ...place.spots.map((s) => s.district)] : []);
   const count = visited.size;
 
   return (
@@ -122,9 +61,9 @@ export function TravelPage() {
       intro="I love getting out of Dhaka. This map colours in the districts of Bangladesh I have visited.">
       <div data-reveal>
         <VStack gap={8}>
-          <div style={{maxWidth: 520, width: '100%', marginInline: 'auto'}}>
+          <div style={{maxWidth: 780, width: '100%', marginInline: 'auto'}}>
             {/* the running count, like Unseen Bangladesh */}
-            <div style={{marginBottom: 12}}>
+            <div style={{marginBottom: 12, maxWidth: 520, marginInline: 'auto'}}>
               <div style={{display: 'flex', alignItems: 'baseline', justifyContent: 'center', gap: 8}}>
                 <span style={{fontSize: 34, fontWeight: 800, letterSpacing: '-0.03em', color: VISITED_TEXT}}>{count}</span>
                 <span style={{fontSize: 16, color: ink(80)}}>of {DISTRICTS.length} districts visited</span>
@@ -142,51 +81,22 @@ export function TravelPage() {
               {(place || hover) && (
                 <div
                   style={{
-                    position: 'absolute', top: 10, left: 10, zIndex: 1, padding: '6px 12px', borderRadius: 999,
+                    position: 'absolute', top: 12, left: '50%', transform: 'translateX(-50%)', zIndex: 1000, padding: '6px 14px', borderRadius: 999, whiteSpace: 'nowrap',
                     background: 'var(--fg)', color: 'var(--bg)', fontSize: 13, fontWeight: 600, pointerEvents: 'none',
                   }}>
                   {hover ? `${hover} · ${visited.has(hover) ? 'visited' : 'not yet'}` : `${place!.name} · ${place!.area}`}
                 </div>
               )}
-              <svg
-                viewBox={`${view.x} ${view.y} ${view.w} ${h}`}
-                role="img"
-                aria-label={`Map of Bangladesh: ${count} of ${DISTRICTS.length} districts visited`}
-                style={{width: '100%', height: 'auto', maxHeight: 'max(320px, calc(100vh - 450px))', display: 'block', margin: '0 auto', overflow: 'hidden'}}>
-                <DistrictLayer visited={visited} activeKey={zoomed ? [...placeDistricts].sort().join('|') : ''} onPick={pickDistrict} onHover={setHover} />
-                {/* district names, once zoomed in */}
-                {zoomed && DISTRICTS.filter((d) => d.cx > view.x && d.cx < view.x + view.w && d.cy > view.y && d.cy < view.y + h).map((d) => (
-                  <text key={d.name} x={d.cx} y={d.cy} textAnchor="middle" fontSize={10 * k} fontWeight={visited.has(d.name) ? 700 : 500}
-                    fill="var(--fg)" opacity={visited.has(d.name) ? 0.85 : 0.35} style={{pointerEvents: 'none'}}>{d.name}</text>
-                ))}
-                {place && place.spots.map((s, i) => {
-                  const [x, y] = projectBD(s.lon, s.lat);
-                  const on = spot === s.name;
-                  return (
-                    <g
-                      key={s.name}
-                      role="button"
-                      tabIndex={0}
-                      aria-label={s.name}
-                      style={{cursor: s.fact ? 'pointer' : 'default', outline: 'none'}}
-                      onClick={() => openSpot(place, s)}
-                      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openSpot(place, s); } }}
-                      onMouseEnter={() => setSpot(s.name)}
-                      onMouseLeave={() => setSpot(null)}
-                      onFocus={() => setSpot(s.name)}
-                      onBlur={() => setSpot(null)}>
-                      <circle cx={x} cy={y} r={(on ? 15 : 11) * k} fill="var(--fg)" stroke="var(--bg)" strokeWidth={1.5 * k} />
-                      <text x={x} y={y + 4.2 * k} textAnchor="middle" fontSize={12 * k} fontWeight={700} fill="var(--bg)">{i + 1}</text>
-                      {on && (
-                        <g>
-                          <rect x={x + 16 * k} y={y - 11 * k} width={(s.name.length * 7 + 18) * k} height={22 * k} rx={6 * k} fill="var(--fg)" />
-                          <text x={x + 25 * k} y={y + 4 * k} fontSize={12 * k} fontWeight={600} fill="var(--bg)">{s.name}</text>
-                        </g>
-                      )}
-                    </g>
-                  );
-                })}
-              </svg>
+              <TravelMap
+                places={travel}
+                visited={visited}
+                focus={place}
+                hoverSpot={spot}
+                onPickDistrict={pickDistrict}
+                onHoverDistrict={setHover}
+                onOpenSpot={openSpot}
+                onHoverSpot={setSpot}
+              />
             </div>
             {zoomed && (
               <div style={{textAlign: 'center', marginTop: 8}}>
@@ -195,7 +105,7 @@ export function TravelPage() {
             )}
           </div>
 
-          <div style={{width: '100%', maxWidth: 640, marginInline: 'auto'}}>
+          <div style={{width: '100%', maxWidth: 880, marginInline: 'auto'}}>
             <Text color="secondary" size="sm" style={{marginBottom: 10, textAlign: 'center'}}>{place ? 'Tap a spot to see a picture and an interesting fact about it. Tap the place again to go back to the whole map.' : 'Pick a place to zoom in, then tap any spot to see a picture and an interesting fact. You can also tap a green district on the map.'}</Text>
             {/* one compact line per place, so the list stays short however many places are added */}
             <ul style={{listStyle: 'none', margin: 0, padding: 0, display: 'flex', flexDirection: 'column'}}>

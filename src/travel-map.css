@@ -1,0 +1,44 @@
+/* The Travelling map: Bangladesh alone, cut out of the page. Colours follow the site's light/dark pair. */
+.tmap {
+  height: clamp(440px, calc(100vh - 340px), 760px); width: 100%; background: transparent; z-index: 0; font: inherit; outline: none;
+  /* the edges fade into the page, so a zoomed-in map is not a hard rectangle */
+  --fade: 22px;
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 var(--fade), #000 calc(100% - var(--fade)), transparent), linear-gradient(to bottom, transparent, #000 var(--fade), #000 calc(100% - var(--fade)), transparent);
+  -webkit-mask-composite: source-in; mask-composite: intersect;
+  mask-image: linear-gradient(to right, transparent, #000 var(--fade), #000 calc(100% - var(--fade)), transparent), linear-gradient(to bottom, transparent, #000 var(--fade), #000 calc(100% - var(--fade)), transparent);
+}
+.tmap .leaflet-top.leaflet-left { margin: 26px 0 0 26px; }
+.tmap .leaflet-bottom.leaflet-right { margin: 0 22px 18px 0; }
+/* the cover hides the world outside the country, in the page's own background colour */
+.tmap path.tmap-cover { fill: var(--bg); fill-opacity: 1; stroke: none; }
+.tmap path.leaflet-interactive { cursor: default; transition: fill-opacity 0.2s ease; }
+.tmap path.tmap-visited { cursor: pointer; }
+.tmap path.tmap-visited:hover { fill-opacity: 0.5; }
+
+.tmap-pin {
+  display: grid; place-items: center; width: 28px; height: 28px; border-radius: 999px; box-sizing: border-box;
+  background: var(--fg); color: var(--bg); border: 2.5px solid var(--bg); font-size: 12px; font-weight: 700; line-height: 1;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35); transition: transform 0.15s ease;
+}
+.tmap-pin.on, .leaflet-marker-icon:hover .tmap-pin, .leaflet-marker-icon:focus-visible .tmap-pin { transform: scale(1.28); }
+.leaflet-marker-icon:focus { outline: none; }
+.leaflet-marker-icon:focus-visible .tmap-pin { outline: 2px solid var(--fg); outline-offset: 3px; }
+
+.leaflet-tooltip.tmap-tip { background: var(--fg); color: var(--bg); border: 0; border-radius: 8px; font-weight: 600; font-size: 13px; padding: 4px 10px; box-shadow: none; }
+.leaflet-tooltip-right.tmap-tip::before { border-right-color: var(--fg); }
+
+/* quiet, rounded controls and credit in the site's colours */
+.tmap .leaflet-bar { border: 0; box-shadow: 0 1px 8px rgba(0, 0, 0, 0.2); border-radius: 10px; overflow: hidden; }
+.tmap .leaflet-bar a { background: var(--bg); color: var(--fg); border-bottom: 1px solid color-mix(in srgb, var(--fg) 14%, transparent); width: 32px; height: 32px; line-height: 32px; }
+.tmap .leaflet-bar a:last-child { border-bottom: 0; }
+.tmap .leaflet-bar a:hover { background: color-mix(in srgb, var(--fg) 8%, var(--bg)); }
+.tmap .leaflet-control-attribution { font-size: 10px; background: color-mix(in srgb, var(--bg) 80%, transparent); color: color-mix(in srgb, var(--fg) 70%, transparent); border-radius: 6px 0 0 0; }
+.tmap .leaflet-control-attribution a { color: inherit; }
+
+/* district names: the page's colour as a halo keeps them readable over roads and rivers */
+.tmap-label {
+  display: inline-block; transform: translate(-50%, -50%); white-space: nowrap; font-size: var(--lbl, 9px); font-weight: 600; letter-spacing: 0.01em;
+  color: color-mix(in srgb, var(--fg) 78%, transparent);
+  text-shadow: 0 0 2px var(--bg), 0 0 3px var(--bg), 0 0 5px var(--bg), 0 0 8px var(--bg);
+}
+.tmap-label.v { font-weight: 800; color: light-dark(#065f46, #6ee7b7); }
